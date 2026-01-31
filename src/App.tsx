@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Header } from './components/common/Header';
+
+// TUS PÁGINAS
+import { InventoryPage } from './pages/provider/InventoryPage';
+
+// PLACEHOLDERS (Páginas vacías para que no falle la app mientras tus amigos trabajan)
+const Home = () => <div className="container" style={{textAlign:'center', marginTop:'50px'}}><h1>🏠 Página de Inicio</h1><p>Bienvenido a ConstruRenta</p></div>;
+const Catalogo = () => <div className="container"><h1>🛒 Catálogo Público (Para Cliente y Todos)</h1></div>;
+const Login = () => <div className="container"><h1>🔐 Login</h1></div>;
+const AdminDashboard = () => <div className="container"><h1>👔 Panel de Administrador</h1><p>Gestión de usuarios y reportes</p></div>;
+const ClientRentals = () => <div className="container"><h1>🎒 Mis Alquileres (Cliente)</h1></div>;
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Header />
+      <main style={{ minHeight: '80vh' }}>
+        <Routes>
+          {/* RUTAS PÚBLICAS */}
+          <Route path="/" element={<Home />} />
+          <Route path="/catalogo" element={<Catalogo />} />
+          <Route path="/login" element={<Login />} />
+
+          {/* 🟦 RUTAS DE ADMINISTRADOR (Compañero 1) */}
+          <Route path="/admin/*" element={<AdminDashboard />} />
+
+          {/* 🟩 RUTAS DE PROVEEDOR (TÚ) */}
+          {/* Aquí es donde trabajarás principalmente */}
+          <Route path="/provider/inventario" element={<InventoryPage />} />
+          <Route path="/provider/reservas" element={<div className="container"><h1>📅 Gestión de Solicitudes</h1></div>} />
+
+          {/* 🟨 RUTAS DE CLIENTE (Compañero 2) */}
+          <Route path="/client/*" element={<ClientRentals />} />
+
+          {/* Ruta por defecto si se pierden */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      
+      {/* FOOTER */}
+      <footer style={{ background: '#333', color: 'white', padding: '20px', textAlign: 'center', marginTop: 'auto' }}>
+        ConstruRenta © 2024
+      </footer>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
