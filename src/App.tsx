@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Header } from './components/common/Header';
+import { Footer } from './components/common/Footer';
 
 // TUS PÁGINAS
 import { InventoryPage } from './pages/provider/InventoryPage';
@@ -39,9 +40,7 @@ function App() {
       </main>
       
       {/* FOOTER */}
-      <footer style={{ background: '#333', color: 'white', padding: '20px', textAlign: 'center', marginTop: 'auto' }}>
-        ConstruRenta © 2024
-      </footer>
+      <Footer />
     </BrowserRouter>
   );
 }
