@@ -1,28 +1,93 @@
 /* src/index.css */
 :root {
-  font-family: system-ui, -apple-system, sans-serif;
+  --imperial-blue: #00296bff;
+  --french-blue: #003f88ff;
+  --steel-azure: #00509dff;
+  --school-bus-yellow: #fdc500ff;
+  --gold: #ffd500ff;
+
+  /* Neutros */
+  --white: #ffffff;
+  --light-gray: #f8f9fa;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --danger: #dc3545;
+  --success: #28a745;
+
+  /* Tipografía Oficial */
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 /* 1. RESET GLOBAL OBLIGATORIO */
 html, body {
-  margin: 0;
-  padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #f3f4f6; /* Gris de fondo parejo */
+}
+
+body {
+  background-color: var(--light-gray);
+  color: var(--text-dark);
 }
 
 /* 2. EL CONTENEDOR DE REACT (#root) DEBE CRECER */
 #root {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100vh;      /* Ocupa al menos toda la pantalla */
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Obliga a los elementos a apilarse verticalmente */
 }
 
-/* 3. REGLA DE ORO PARA RESPONSIVE */
-*, *::before, *::after {
-  box-sizing: border-box; /* Esto evita que los paddings rompan el ancho */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: var(--imperial-blue);
+  color: var(--white);
+}
+.btn-primary:hover {
+  background-color: var(--french-blue);
+}
+
+.btn-secondary {
+  background-color: var(--school-bus-yellow);
+  color: var(--imperial-blue);
+}
+.btn-secondary:hover {
+  background-color: var(--gold);
+}
+
+.page-title {
+  color: var(--imperial-blue);
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--school-bus-yellow);
+  display: inline-block;
+  padding-bottom: 5px;
 }

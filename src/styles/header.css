@@ -1,0 +1,26 @@
+/* src/components/common/Header.css */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-item {
+  color: var(--white);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-item:hover {
+  color: var(--school-bus-yellow);
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}

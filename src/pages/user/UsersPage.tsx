@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { userService } from '../services/userService';
-import type { User } from '../types/auth';
-import { useAuth } from '../contexts/AuthContext';
+import { userService } from '../../services/userService';
+import type { User } from '../../types/auth';
+import { useAuth } from '../../contexts/AuthContext';
 import './UsersPage.css';
 
 export default function UsersPage() {
