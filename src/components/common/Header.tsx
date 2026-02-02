@@ -1,72 +1,71 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import '../../styles/header.css';
 
 const Header = () => {
-  // ESTADO TEMPORAL PARA SIMULAR ROLES (Borrar esto cuando integren el Login real)
-  const [role, setRole] = useState<'guest' | 'admin' | 'provider' | 'client'>('guest');
+
+  const { isAuthenticated, logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <header style={{ backgroundColor: 'var(--imperial-blue)', padding: '1rem 0', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+    <header className="header" style={{ backgroundColor: 'var(--imperial-blue)', padding: '1rem 0' }}>
       <div className="container header-container">
-        
+
         {/* LOGO */}
-        <Link to="/" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--school-bus-yellow)' }}>
-          ConstruRenta 🏗️
-        </Link>
+        <div className="logo">
+          <Link to="/" style={{ textDecoration: 'none', color: 'var(--school-bus-yellow)', fontWeight: 'bold', fontSize: '1.5rem' }}>
+            ConstruRenta 🏗️
+          </Link>
+        </div>
 
-        {/* NAVEGACIÓN DINÁMICA SEGÚN EL ROL */}
-        <nav className="nav-links">
-          <Link to="/" className="nav-item">Inicio</Link>
-          <Link to="/catalogo" className="nav-item">Catálogo</Link>
+        {/* NAVEGACIÓN */}
+        <nav className="nav-menu">
+          <ul style={{ display: 'flex', gap: '20px', listStyle: 'none', margin: 0, padding: 0 }}>
 
-          {/* MENÚ SOLO PARA ADMIN (Tu compañero) */}
-          {role === 'admin' && (
-            <>
-              <Link to="/admin/usuarios" className="nav-item" style={{ color: 'var(--gold)' }}>👥 Usuarios</Link>
-              <Link to="/admin/reportes" className="nav-item" style={{ color: 'var(--gold)' }}>📊 Reportes</Link>
-            </>
-          )}
+            {!isAuthenticated && (
+                <span style={{ color: 'white', fontWeight: 500 }}>
+                    ¡Bienvenido a ConstruRenta! 👋
+                </span>
+            )}
 
-          {/* MENÚ SOLO PARA PROVEEDOR (Tú) */}
-          {role === 'provider' && (
-            <>
-              <Link to="/provider/inventario" className="nav-item" style={{ color: '#00ffcc' }}>🛠️ Mi Inventario</Link>
-              <Link to="/provider/reservas" className="nav-item" style={{ color: '#00ffcc' }}>📅 Solicitudes</Link>
-            </>
-          )}
+            {/* Solo mostramos estos links si el usuario tiene el rol correcto */}
 
-          {/* MENÚ SOLO PARA CLIENTE (Tu compañero) */}
-          {role === 'client' && (
-             <Link to="/client/mis-alquileres" className="nav-item">🎒 Mis Alquileres</Link>
-          )}
+            {isAuthenticated && user?.role === 'CUSTOMER' && (
+              <p style={{ color: 'var(--gold)' }}>Lista De Mis Prestamos</p>
+            )}
+
+            {isAuthenticated && user?.role === 'PROVIDER' && (
+              <p style={{ color: 'var(--gold)' }}>Lista De Usuarios</p>
+            )}
+
+            {isAuthenticated && user?.role === 'ADMIN' && (
+              <p style={{ color: 'var(--gold)' }}>Lista De Usuarios</p>
+            )}
+          </ul>
         </nav>
 
-        {/* SIMULADOR DE ROLES (Botones temporales para desarrollo) */}
-        <div style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '5px', borderRadius: '5px' }}>
-          <span style={{ color: 'white', marginRight: '5px' }}>Simular:</span>
-          <button onClick={() => setRole('admin')}>Admin</button> | 
-          <button onClick={() => setRole('provider')}>Prov</button> | 
-          <button onClick={() => setRole('client')}>Client</button>
-        </div>
-
-        {/* BOTONES DE AUTH */}
+        {/* BOTONES DE ACCIÓN */}
         <div className="auth-buttons">
-          {role === 'guest' ? (
-            <Link to="/login">
-              <button className="btn btn-secondary" style={{ padding: '8px 15px' }}>Ingresar</button>
-            </Link>
-          ) : (
-            <button onClick={() => setRole('guest')} className="btn btn-primary" style={{ border: '1px solid white' }}>
-              Salir ({role})
-            </button>
+          {isAuthenticated && (
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <button
+                onClick={handleLogout}
+                className="btn"
+                style={{ backgroundColor: '#ef4444', color: 'white' }}
+              >
+                Salir
+              </button>
+            </div>
           )}
         </div>
-
       </div>
     </header>
   );
-
 };
 
 export default Header;

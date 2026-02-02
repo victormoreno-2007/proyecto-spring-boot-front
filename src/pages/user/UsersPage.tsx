@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { userService } from '../../services/userService';
 import type { User } from '../../types/auth';
-import { useAuth } from '../../contexts/AuthContext';
 import './UsersPage.css';
 
 export default function UsersPage() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
-    const { logout } = useAuth();
 
     // ESTADOS PARA EL MODAL DE CREACIÓN
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,15 +53,14 @@ export default function UsersPage() {
 
     // Enviar el formulario
     const handleCreateUser = async (e: React.FormEvent) => {
-        e.preventDefault(); // Evitar recarga
+        e.preventDefault(); 
         try {
-            // 1. Llamar al backend
+           
             const newUser = await userService.createUser(formData);
             
-            // 2. Agregar el nuevo usuario a la tabla visualmente
+           
             setUsers([...users, newUser]);
             
-            // 3. Cerrar modal y limpiar
             setIsModalOpen(false);
             setFormData({ firstName: '', lastName: '', email: '', password: '', role: 'CUSTOMER' });
             
@@ -83,10 +80,6 @@ export default function UsersPage() {
                     {/* 👇 BOTÓN NUEVO USUARIO */}
                     <button onClick={() => setIsModalOpen(true)} className="btn-create">
                         + Nuevo Usuario
-                    </button>
-                    
-                    <button onClick={logout} className="btn-logout">
-                        Cerrar Sesión
                     </button>
                 </div>
             </div>
