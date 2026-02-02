@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
@@ -8,14 +8,27 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const { login } = useAuth();
+    const { login, isAuthenticated, user } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Si ya está autenticado, no tiene nada que hacer aquí.
+        if (isAuthenticated) {
+            // Lo mandamos a su panel correspondiente según su rol
+            if (user?.role === 'ADMIN') {
+                navigate('/admin/users', { replace: true });
+            } else {
+                navigate('/my-home', { replace: true });
+            }
+        }
+    }, [isAuthenticated, user, navigate]);
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         setError('');
 
         try {
+            await login(email, password);
             // 1. Esperamos a que el login termine y nos devuelva el usuario
             const loggedUser: any = await login(email, password);
             

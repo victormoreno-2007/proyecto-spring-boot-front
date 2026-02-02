@@ -16,6 +16,6 @@ export const authService = {
     },
 
     logout(){
-        localStorage.removeItem('accesToken');
+        localStorage.removeItem('accessToken');
     }
 }
