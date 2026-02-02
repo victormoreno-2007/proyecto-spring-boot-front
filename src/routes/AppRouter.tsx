@@ -1,47 +1,55 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/login/LoginPage';
 import UsersPage from '../pages/user/UsersPage';
-import type { JSX } from 'react';
 import ClientHomePage from '../pages/ClientHomePage';
-
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-    const { isAuthenticated, isLoading } = useAuth();
-
-    if (isLoading) {
-        return <div style={{ textAlign: 'center', marginTop: '50px' }}>Cargando sistema...</div>;
-    }
-    if (!isAuthenticated) {
-        return <Navigate to="/login" />;
-    }
-    return children;
-}
+import { InventoryPage } from '../pages/provider/InventoryPage'; // Página de Marcela
+import MainLayout from '../layouts/MainLayout'; 
+import PrivateRoute from './PrivateRoute'; 
 
 export default function AppRouter() {
     return (
-        <BrowserRouter>
-            <AuthProvider>
-                <Routes>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route
-                        path="/admin/users"
-                        element={
-                            <PrivateRoute>
-                                <UsersPage />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/my-home"
-                        element={
-                            <PrivateRoute>
-                                <ClientHomePage />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route path="*" element={<Navigate to="/login" />} />
-                </Routes>
-            </AuthProvider>
-        </BrowserRouter>
+        <Routes>
+        
+            <Route element={<MainLayout />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={<Navigate to="/login" replace />} />
+            </Route>
+
+            
+            <Route element={<MainLayout />}>
+                
+              
+                <Route 
+                    path="/admin/users" 
+                    element={
+                        <PrivateRoute>
+                            <UsersPage />
+                        </PrivateRoute>
+                    } 
+                />
+
+                
+                <Route 
+                    path="/my-home" 
+                    element={
+                        <PrivateRoute>
+                            <ClientHomePage />
+                        </PrivateRoute>
+                    } 
+                />
+
+                
+                <Route 
+                    path="/my-inventory" 
+                    element={
+                        <PrivateRoute>
+                            <InventoryPage />
+                        </PrivateRoute>
+                    } 
+                />
+            </Route>
+
+            <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
     );
 }

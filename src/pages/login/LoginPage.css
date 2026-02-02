@@ -1,30 +1,20 @@
-/* src/pages/LoginPage.css */
 
-/* 1. EL CONTENEDOR PRINCIPAL */
 .login-container {
-    /* Usamos min-height en vez de height fixed para permitir scroll en celulares pequeños o apaisados */
-    min-height: 100vh;
+    min-height: 80vh;
     width: 100%;
     
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    background-color: #f3f4f6;
-    
-    /* 📱 CLAVE: Padding pequeño para que la tarjeta no toque los bordes del celular */
     padding: 1rem; 
-    box-sizing: border-box; /* Para que el padding no rompa el ancho */
+    box-sizing: border-box; 
 }
 
-/* 2. LA TARJETA (CARD) */
+
 .login-card {
     background: white;
     width: 100%;
-    
-    /* En PC será de 400px, pero en celular ocupará todo el ancho disponible */
     max-width: 400px; 
-    
     padding: 2.5rem;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -64,7 +54,7 @@
     border-radius: 6px;
     font-size: 1rem;
     background-color: #f9fafb;
-    box-sizing: border-box; /* Vital para que no se salga del contenedor */
+    box-sizing: border-box; 
 }
 
 .form-input:focus {
@@ -104,22 +94,22 @@
     border: 1px solid #fecaca;
 }
 
-/* 📱 5. REGLAS ESPECIALES PARA CELULARES (Media Queries) */
+
 @media (max-width: 480px) {
     .login-card {
-        padding: 1.5rem; /* Menos relleno para aprovechar espacio */
-        box-shadow: none; /* Opcional: Quitar sombra en pantallas muy peques para que se vea más limpio */
-        border: 1px solid #e5e7eb; /* Borde suave en lugar de sombra */
+        padding: 1.5rem; 
+        box-shadow: none;
+        border: 1px solid #e5e7eb;
     }
 
     .login-title {
-        font-size: 1.5rem; /* Título un poco más pequeño */
+        font-size: 1.5rem; 
         margin-bottom: 1.5rem;
     }
 
     .login-container {
-        padding: 0.5rem; /* Casi pegado al borde en móviles muy estrechos */
-        align-items: flex-start; /* Subir el login un poco en pantallas cortas */
-        padding-top: 10vh; /* Un poco de aire arriba */
+        padding: 0.5rem;
+        align-items: flex-start; 
+        padding-top: 10vh; 
     }
 }
