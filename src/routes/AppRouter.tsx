@@ -2,23 +2,31 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/login/LoginPage';
 import UsersPage from '../pages/user/UsersPage';
 import ClientHomePage from '../pages/ClientHomePage';
-import { InventoryPage } from '../pages/provider/InventoryPage'; // Página de Marcela
-import MainLayout from '../layouts/MainLayout'; 
-import PrivateRoute from './PrivateRoute'; 
+
+import MainLayout from '../layouts/MainLayout';
+import PrivateRoute from './PrivateRoute';
+
+import { InventoryPage } from '../pages/provider/InventoryPage';
+import HomePage from '../pages/home/HomePage';
+import RegisterPage from '../pages/resgister/RegisterPage';
 
 export default function AppRouter() {
     return (
         <Routes>
-        
-            <Route element={<MainLayout />}>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/" element={<Navigate to="/login" replace />} />
-            </Route>
-
-            
+           
             <Route element={<MainLayout />}>
                 
-              
+                
+                <Route path="/" element={<HomePage />} />
+                
+               
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                
+            </Route>
+
+            {/* RUTAS PRIVADAS (Protegidas) */}
+            <Route element={<MainLayout />}>
                 <Route 
                     path="/admin/users" 
                     element={
@@ -27,8 +35,6 @@ export default function AppRouter() {
                         </PrivateRoute>
                     } 
                 />
-
-                
                 <Route 
                     path="/my-home" 
                     element={
@@ -37,8 +43,6 @@ export default function AppRouter() {
                         </PrivateRoute>
                     } 
                 />
-
-                
                 <Route 
                     path="/my-inventory" 
                     element={
@@ -49,7 +53,8 @@ export default function AppRouter() {
                 />
             </Route>
 
-            <Route path="*" element={<Navigate to="/login" />} />
+            
+            <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );
 }

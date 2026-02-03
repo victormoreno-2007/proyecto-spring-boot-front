@@ -8,8 +8,10 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
+    navigate("/");
+    setTimeout(() => {
+        logout();
+    }, 100);
   };
 
   return (
@@ -28,9 +30,9 @@ const Header = () => {
           <ul style={{ display: 'flex', gap: '20px', listStyle: 'none', margin: 0, padding: 0 }}>
 
             {!isAuthenticated && (
-                <span style={{ color: 'white', fontWeight: 500 }}>
-                    ¡Bienvenido a ConstruRenta! 👋
-                </span>
+              <span style={{ color: 'white', fontWeight: 500 }}>
+                ¡Bienvenido a ConstruRenta! 👋
+              </span>
             )}
 
             {/* Solo mostramos estos links si el usuario tiene el rol correcto */}
@@ -51,8 +53,16 @@ const Header = () => {
 
         {/* BOTONES DE ACCIÓN */}
         <div className="auth-buttons">
-          {isAuthenticated && (
+          {!isAuthenticated ? (
+
+            <Link to="/login">
+              <button className="btn btn-secondary">Ingresar</button>
+            </Link>
+          ) : (
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <span style={{ color: 'white', fontSize: '0.9rem' }}>
+                Hola, {user?.firstName}
+              </span>
               <button
                 onClick={handleLogout}
                 className="btn"

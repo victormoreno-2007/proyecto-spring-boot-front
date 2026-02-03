@@ -1,5 +1,12 @@
 import { api } from './api';
-import type { LoginResponse } from '../types/auth';
+import type { LoginResponse, User } from '../types/auth';
+
+export interface RegisterDTO {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+}
 
 export const authService = {
 
@@ -12,6 +19,11 @@ export const authService = {
             localStorage.setItem('accessToken', response.data.accessToken);
         }
         
+        return response.data;
+    },
+
+    register: async (data: RegisterDTO) => {
+        const response = await api.post<LoginResponse>('/auth/register', data);
         return response.data;
     },
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
 export default function LoginPage() {
@@ -64,7 +64,7 @@ export default function LoginPage() {
                             className="form-input"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="admin@construrrenta.com"
+                            placeholder="ejemplo@ejemplo.com"
                             required
                         />
                     </div>
@@ -82,6 +82,10 @@ export default function LoginPage() {
                     <button type="submit" className="btn-login">
                         Ingresar
                     </button>
+
+                    <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.9rem' }}>
+                        ¿Eres nuevo? <Link to="/register" style={{ color: '#2563eb', fontWeight: 'bold' }}>Crea una cuenta</Link>
+                    </div>
                 </form>
             </div>
         </div>

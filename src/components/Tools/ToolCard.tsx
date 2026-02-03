@@ -5,7 +5,7 @@ interface ToolCardProps {
   disponible: boolean;
 }
 
-export const ToolCard = ({ nombre, precio, imagen, disponible }: ToolCardProps) => {
+const ToolCard = ({ nombre, precio, imagen, disponible }: ToolCardProps) => {
   return (
     <div style={{ 
       border: '1px solid #ddd', 
@@ -37,3 +37,5 @@ export const ToolCard = ({ nombre, precio, imagen, disponible }: ToolCardProps) 
     </div>
   );
 };
+
+export default ToolCard;
