@@ -1,17 +1,46 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useState, useRef, useEffect } from 'react';
 import '../../styles/header.css';
 
 const Header = () => {
-
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // DETECTOR DE CLICS AFUERA
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     navigate("/");
     setTimeout(() => {
-        logout();
+      logout();
     }, 100);
+  };
+
+  const getInspiringMessage = () => {
+    if (isAuthenticated && user) {
+      return `¡Manos a la obra, ${user.firstName}! 💪`;
+    }
+    return "Construyendo sueños, herramienta a herramienta 🏗️";
   };
 
   return (
@@ -19,60 +48,62 @@ const Header = () => {
       <div className="container header-container">
 
         {/* LOGO */}
-        <div className="logo">
+        <div className="logo" style={{ flexShrink: 0 }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'var(--school-bus-yellow)', fontWeight: 'bold', fontSize: '1.5rem' }}>
             ConstruRenta 🏗️
           </Link>
         </div>
 
-        {/* NAVEGACIÓN */}
-        <nav className="nav-menu">
-          <ul style={{ display: 'flex', gap: '20px', listStyle: 'none', margin: 0, padding: 0 }}>
-
-            {!isAuthenticated && (
-              <span style={{ color: 'white', fontWeight: 500 }}>
-                ¡Bienvenido a ConstruRenta! 👋
-              </span>
-            )}
-
-            {/* Solo mostramos estos links si el usuario tiene el rol correcto */}
-
-            {isAuthenticated && user?.role === 'CUSTOMER' && (
-              <p style={{ color: 'var(--gold)' }}>Lista De Mis Prestamos</p>
-            )}
-
-            {isAuthenticated && user?.role === 'PROVIDER' && (
-              <p style={{ color: 'var(--gold)' }}>Lista De Usuarios</p>
-            )}
-
-            {isAuthenticated && user?.role === 'ADMIN' && (
-              <p style={{ color: 'var(--gold)' }}>Lista De Usuarios</p>
-            )}
-          </ul>
-        </nav>
-
-        {/* BOTONES DE ACCIÓN */}
-        <div className="auth-buttons">
-          {!isAuthenticated ? (
-
-            <Link to="/login">
-              <button className="btn btn-secondary">Ingresar</button>
-            </Link>
-          ) : (
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span style={{ color: 'white', fontSize: '0.9rem' }}>
-                Hola, {user?.firstName}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="btn"
-                style={{ backgroundColor: '#ef4444', color: 'white' }}
-              >
-                Salir
-              </button>
-            </div>
-          )}
+        <div className="inspiring-message" style={{ flex: 1, textAlign: 'center', padding: '0 1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ color: '#e2e8f0', fontStyle: 'italic', fontSize: '0.95rem' }}>
+                {getInspiringMessage()}
+            </span>
         </div>
+
+        {/* NAVEGACIÓN */}
+        <div className="right-section">
+            
+            {/* NAVEGACIÓN (Inicio) */}
+            <nav className="nav-menu">
+                <ul style={{ display: 'flex', listStyle: 'none', margin: 0, padding: 0 }}>
+                    {isAuthenticated && user?.role === 'ADMIN' ? (
+                        <li><Link to="/admin/users" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>Inicio</Link></li>
+                    ) : isAuthenticated && user?.role === 'PROVIDER' ? (
+                        <li><Link to="/my-inventory" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>Inicio</Link></li>
+                    ) : (
+                        <li><Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>Inicio</Link></li>
+                    )}
+                </ul>
+            </nav>
+
+            {/* BOTONES DE SESIÓN */}
+            <div className="auth-buttons">
+                {!isAuthenticated ? (
+                    <Link to="/login">
+                        <button className="btn btn-secondary" style={{ whiteSpace: 'nowrap' }}>Ingresar</button>
+                    </Link>
+                ) : (
+                    <div className="user-menu-container" ref={menuRef}>
+                        <div 
+                            className="user-avatar" 
+                            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+                            title={user?.firstName}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            {user?.firstName?.charAt(0).toUpperCase()}
+                        </div>
+                        {isMenuOpen && (
+                            <div className="dropdown-box">
+                                <div className="user-name-display">{user?.firstName}</div>
+                                <div style={{fontSize: '0.8rem', color: '#666', textAlign: 'center', marginBottom: '10px'}}>{user?.email}</div>
+                                <button onClick={handleLogout} className="btn-logout-dropdown">Cerrar Sesión</button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+
       </div>
     </header>
   );

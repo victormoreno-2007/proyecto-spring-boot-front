@@ -4,7 +4,7 @@ import ToolCard from "../../components/Tools/ToolCard";
 
 export default function HomePage() {
     return (
-        <div className="container" style={{ padding: '2rem 0', textAlign: 'center' }}>
+        <div className="container" style={{ padding: '2rem 0', textAlign: 'center'}}>
             <h1 className="page-title">Bienvenido a ConstruRenta 🏗️</h1>
             <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>
                 El mejor catálogo de herramientas para tus proyectos.

@@ -2,13 +2,23 @@
 
 // ⚠️ AJUSTA ESTA RUTA según donde creaste el archivo CSS. 
 // Si está en 'src/styles/Footer.css', la ruta sería: '../../styles/Footer.css'
+import { useAuth } from '../../contexts/AuthContext';
 import '../../styles/Footer.css'; 
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
+  
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
+  const handleLogout = () => {
+      navigate("/");
+      setTimeout(() => {
+          logout();
+      }, 100);
+    };
   return (
     <footer className="main-footer">
       <div className="container footer-grid">
@@ -26,10 +36,10 @@ const Footer = () => {
         <div className="footer-column">
           <h4>Navegación</h4>
           <ul className="footer-links">
-            <li><Link to="/">Inicio</Link></li>
+            <li><Link onClick={handleLogout} to="/">Inicio</Link></li>
             <li><Link to="/herramientas">Catálogo</Link></li>
             <li><Link to="/login">Iniciar Sesión</Link></li>
-            <li><Link to="/registro">Registrarse</Link></li>
+            <li><Link to="/register">Registrarse</Link></li>
           </ul>
         </div>
 

@@ -92,4 +92,5 @@ a {
   border-bottom: 2px solid var(--school-bus-yellow);
   display: inline-block;
   padding-bottom: 5px;
+  z-index: 1;
 }
