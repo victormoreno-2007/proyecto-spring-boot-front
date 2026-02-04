@@ -51,13 +51,7 @@ const Header = () => {
           {/* Usamos clases del CSS en lugar de estilos inline para mejor hover */}
           <nav className="nav-menu">
             <ul style={{ display: 'flex', gap: '20px', listStyle: 'none', margin: 0, padding: 0 }}>
-
-              {/* ENLACE PÚBLICO: Siempre visible */}
-              <li>
-                <Link to="/" className="nav-item" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>
-                  Catálogo
-                </Link>
-              </li>
+               
 
               {/* MENÚ PARA ADMINISTRADOR */}
               {isAuthenticated && user?.role === 'ADMIN' && (
@@ -74,6 +68,11 @@ const Header = () => {
               {/* MENÚ PARA PROVEEDOR */}
               {isAuthenticated && user?.role === 'PROVIDER' && (
                 <>
+                 <li>
+                  <Link to="/" className="nav-item" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>
+                  Inicio
+                  </Link>
+                </li>
                   <li>
                     <Link to="/my-inventory" className="nav-item" style={{ color: 'white' }}>
                       📦 Mi Inventario
@@ -90,6 +89,11 @@ const Header = () => {
               {/* MENÚ PARA CLIENTE */}
               {isAuthenticated && user?.role === 'CUSTOMER' && (
                 <>
+                 <li>
+                  <Link to="/" className="nav-item" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>
+                  Inicio
+                  </Link>
+                </li>
                   <li>
                     <Link to="/my-home" style={{ color: '#fdc500', textDecoration: 'none', fontWeight: 'bold' }}>
                       📅 Mis Reservas
@@ -114,7 +118,7 @@ const Header = () => {
 
                 {/* Mensaje de bienvenida corto */}
                 <span style={{ color: 'white', marginRight: '10px', fontSize: '0.9rem', display: 'block' }}>
-                  Hola, {user?.firstName}
+                 Bienvenido, {user?.firstName}
                 </span>
 
                 <div
