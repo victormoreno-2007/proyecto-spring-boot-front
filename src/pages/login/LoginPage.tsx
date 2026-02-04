@@ -13,12 +13,14 @@ export default function LoginPage() {
 
     useEffect(() => {
         // Si ya está autenticado, no tiene nada que hacer aquí.
-        if (isAuthenticated) {
+        if (isAuthenticated && user) {
             // Lo mandamos a su panel correspondiente según su rol
             if (user?.role === 'ADMIN') {
                 navigate('/admin/users', { replace: true });
+            } else if (user.role === 'PROVIDER') {
+                navigate('/my-inventory', { replace: true });
             } else {
-                navigate('/my-home', { replace: true });
+                navigate('/', { replace: true }); // Cliente -> Home
             }
         }
     }, [isAuthenticated, user, navigate]);
@@ -35,10 +37,12 @@ export default function LoginPage() {
             // 2. DECIDIMOS A DÓNDE IR SEGÚN EL ROL
             if (loggedUser?.role === 'ADMIN') {
                 navigate('/admin/users');
-            } else {
+            } else if (loggedUser?.role === 'PROVIDER'){
+                navigate('/my-inventory');
+            } else{
                 // Si es Cliente o Proveedor, va a su home
-                navigate('/my-home'); 
-            }
+                navigate('/'); 
+            } 
 
         } catch (err) {
             console.error(err);
