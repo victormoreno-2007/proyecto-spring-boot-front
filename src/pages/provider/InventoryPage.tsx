@@ -61,6 +61,7 @@ export const InventoryPage = () => {
               <tr>
                 <th style={{ padding: '15px', textAlign: 'left' }}>Producto</th>
                 <th style={{ padding: '15px', textAlign: 'left' }}>Precio/Día</th>
+                <th style={{ padding: '15px', textAlign: 'center' }}>Stock</th>
                 <th style={{ padding: '15px', textAlign: 'center' }}>Estado</th>
                 <th style={{ padding: '15px', textAlign: 'right' }}>Gestión</th>
               </tr>
@@ -84,6 +85,10 @@ export const InventoryPage = () => {
                   </td>
                   <td style={{ padding: '15px', fontWeight: 'bold', color: 'var(--imperial-blue)' }}>
                     ${tool.pricePerDay.toLocaleString()}
+                  </td>
+                  <td style={{ padding: '15px', textAlign: 'center', fontSize: '1.1rem', fontWeight: 'bold' }}>
+                    {/* Si tool.stock existe, lo muestra. Si no (porque el back no lo manda), muestra 1 */}
+                     {tool.stock ?? 1} 
                   </td>
                   <td style={{ padding: '15px', textAlign: 'center' }}>
                     <span style={{

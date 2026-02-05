@@ -12,7 +12,8 @@ export const CreateToolPage = () => {
         name: '',
         pricePerDay: 0,
         description: '',
-        imageUrl: ''
+        imageUrl: '',
+        stock: 1
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +27,8 @@ export const CreateToolPage = () => {
                 pricePerDay: Number(newTool.pricePerDay),
                 imageUrl: newTool.imageUrl || "https://placehold.co/300x200?text=Sin+Imagen",
                 providerId: user.id, // Tu ID de Backend
-                status: 'AVAILABLE'
+                status: 'AVAILABLE',
+                stock: newTool.stock
             };
 
             await toolService.createTool(toolToSave);
@@ -77,6 +79,17 @@ export const CreateToolPage = () => {
                                     // Si el valor es vacío, guardamos 0, si no, lo convertimos a float
                                     pricePerDay: e.target.value === '' ? 0 : parseFloat(e.target.value)
                                 })}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Stock Disponible</label>
+                            <input
+                                required
+                                type="number"
+                                min="1"
+                                style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }}
+                                value={newTool.stock}
+                                onChange={(e) => setNewTool({ ...newTool, stock: parseInt(e.target.value) || 0 })}
                             />
                         </div>
                         <div>

@@ -13,7 +13,8 @@ export const EditToolPage = () => {
     description: '',
     imageUrl: '',
     providerId: '',
-    status: 'AVAILABLE'
+    status: 'AVAILABLE',
+    stock: 1
   });
 
   // 1. Cargar datos al entrar
@@ -26,7 +27,7 @@ export const EditToolPage = () => {
   const loadToolData = async (toolId: string) => {
       try {
           const tool = await toolService.getToolById(toolId);
-          setFormData(tool); // Llenamos el formulario con los datos reales
+          setFormData({ ...tool, stock: tool.stock ?? 1 })
       } catch (error) {
           alert("Error al cargar la herramienta");
           navigate('/my-inventory');
