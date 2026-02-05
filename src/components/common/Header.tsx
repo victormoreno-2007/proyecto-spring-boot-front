@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useState, useRef, useEffect } from 'react';
 import '../../styles/header.css';
@@ -6,10 +6,37 @@ import '../../styles/header.css';
 const Header = () => {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation(); 
+  const [, setSearchParams] = useSearchParams(); 
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const menuRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const searchablePaths = ['/', '/my-inventory', '/admin/users'];
+
+    if (!searchablePaths.includes(location.pathname)) return;
+
+    const timeoutId = setTimeout(() => {
+        if (searchTerm) {
+            setSearchParams({ q: searchTerm });
+        } else {
+            setSearchParams({});
+        }
+    }, 300); 
+    
+    return () => clearTimeout(timeoutId);
+
+  }, [searchTerm, location.pathname, setSearchParams]);
+
+  const handleSearch = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    const searchablePaths = ['/', '/my-inventory', '/admin/users'];
+    if (!searchablePaths.includes(location.pathname)) {
+        navigate(`/?q=${searchTerm}`);
+    }
+  };
   // DETECTOR DE CLICS AFUERA (Para cerrar el menú de usuario)
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -44,6 +71,18 @@ const Header = () => {
             ConstruRenta 🏗️
           </Link>
         </div>
+        <form onSubmit={handleSearch} className="search-container">
+                <input 
+                    type="text" 
+                    className="search-input"
+                    placeholder="Buscar..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button type="submit" className="search-btn">
+                    🔍
+                </button>
+            </form>
 
         {/* 2. MENÚ DE NAVEGACIÓN CENTRAL (DINÁMICO SEGÚN ROL) */}
         <div className="inspiring-message" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
@@ -133,11 +172,13 @@ const Header = () => {
                 {isMenuOpen && (
                   <div className="dropdown-box">
                     <div className="user-name-display">{user?.firstName} {user?.lastName}</div>
-                    <div style={{ fontSize: '0.75rem', color: '#666', textAlign: 'center', marginBottom: '5px' }}>
-                      Rol: <strong>{user?.role}</strong>
-                    </div>
                     <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'center', marginBottom: '10px' }}>{user?.email}</div>
+                    <Link to="/profile" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                        <span>✏️</span> Editar Perfil
+                    </Link>
+                    <div className="dropdown-divider"></div>
                     <button onClick={handleLogout} className="btn-logout-dropdown">Cerrar Sesión</button>
+                    
                   </div>
                 )}
               </div>

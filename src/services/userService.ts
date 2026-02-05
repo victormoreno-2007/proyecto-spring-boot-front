@@ -11,6 +11,10 @@ export const userService = {
         const response = await api.post<User>('/users', userData);
         return response.data;
     },
+    async updateUser(id: string, userData: { firstName?: string; lastName?: string; password?: string | null }) {
+        const response = await api.put<User>(`/users/${id}`, userData);
+        return response.data;
+    },
 
     async deleteUser(id: String) {
         await api.delete(`/users/${id}`);

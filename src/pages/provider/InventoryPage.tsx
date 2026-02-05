@@ -2,12 +2,19 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { toolService, type Tool } from '../../services/toolService';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 export const InventoryPage = () => {
   const { user } = useAuth();
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get('q')?.toLowerCase() || '';
+
+  const filteredTools = tools.filter(tool => 
+      tool.name.toLowerCase().includes(searchTerm)
+  );
 
   useEffect(() => {
     if (user?.id) loadMyTools();
@@ -62,7 +69,7 @@ export const InventoryPage = () => {
               {tools.length === 0 && (
                 <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center' }}>No tienes herramientas aún.</td></tr>
               )}
-              {tools.map((tool) => (
+              {filteredTools.map((tool) => (
                 <tr key={tool.id} style={{ borderBottom: '1px solid #eee' }}>
                   <td style={{ padding: '15px', display: 'flex', alignItems: 'center', gap: '15px' }}>
                     <img

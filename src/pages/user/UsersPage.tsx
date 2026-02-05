@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
 import { userService } from '../../services/userService';
 import type { User } from '../../types/auth';
+import { useSearchParams } from 'react-router-dom';
 import './UsersPage.css';
 
 export default function UsersPage() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchParams] = useSearchParams();
+    const searchTerm = searchParams.get('q')?.toLowerCase() || '';
+
+    const filteredUsers = users.filter(user => 
+        user.firstName.toLowerCase().includes(searchTerm) ||
+        user.email.toLowerCase().includes(searchTerm) ||
+        user.role.toLowerCase().includes(searchTerm)
+    );
 
     // ESTADOS PARA EL MODAL DE CREACIÓN
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,7 +86,6 @@ export default function UsersPage() {
                 <h1 className="title">Gestión de Usuarios</h1>
                 
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    {/* 👇 BOTÓN NUEVO USUARIO */}
                     <button onClick={() => setIsModalOpen(true)} className="btn-create">
                         + Nuevo Usuario
                     </button>
@@ -99,7 +107,7 @@ export default function UsersPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user) => (
+                            {filteredUsers.map((user) => (
                                 <tr key={user.id}>
                                     <td>
                                         <strong>{user.firstName} {user.lastName}</strong>

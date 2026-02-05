@@ -30,7 +30,6 @@ export default function LoginPage() {
         setError('');
 
         try {
-            await login(email, password);
             // 1. Esperamos a que el login termine y nos devuelva el usuario
             const loggedUser: any = await login(email, password);
             

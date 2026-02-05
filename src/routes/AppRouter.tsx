@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/login/LoginPage';
 import UsersPage from '../pages/user/UsersPage';
-import ClientHomePage from '../pages/ClientHomePage';
+
 
 import MainLayout from '../layouts/MainLayout';
 import PrivateRoute from './PrivateRoute';
@@ -11,6 +11,9 @@ import HomePage from '../pages/home/HomePage';
 import RegisterPage from '../pages/resgister/RegisterPage';
 import { CreateToolPage } from '../pages/provider/CreateToolPage';
 import { EditToolPage } from '../pages/provider/EditToolPage';
+import MyBookingsPage from '../client/MyBookingsPage';
+import AdminReportsPage from '../pages/admin/AdminReportsPage';
+import ProfilePage from '../pages/profile/ProfilePage';
 
 export default function AppRouter() {
     return (
@@ -41,7 +44,7 @@ export default function AppRouter() {
                     path="/my-home"
                     element={
                         <PrivateRoute>
-                            <ClientHomePage />
+                            <MyBookingsPage />
                         </PrivateRoute>
                     }
                 />
@@ -68,6 +71,19 @@ export default function AppRouter() {
                     element={
                         <PrivateRoute>
                             <EditToolPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route path="/admin/reports" element={
+                    <PrivateRoute>
+                        <AdminReportsPage />
+                    </PrivateRoute>
+                } />
+                <Route
+                    path="/profile"
+                    element={
+                        <PrivateRoute>
+                            <ProfilePage />
                         </PrivateRoute>
                     }
                 />

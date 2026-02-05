@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
 import ToolCard from "../../components/Tools/ToolCard";
 import { toolService, type Tool } from '../../services/toolService';
+import { useSearchParams } from 'react-router-dom';
 
 export default function HomePage() {
     const [tools, setTools] = useState<Tool[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchParams] = useSearchParams();
+
+    const searchTerm = searchParams.get('q')?.toLowerCase() || '';
+    
+    const filteredTools = tools.filter(tool => 
+        tool.name.toLowerCase().includes(searchTerm) || 
+        tool.description.toLowerCase().includes(searchTerm)
+    );
 
     useEffect(() => {
         loadCatalog();
@@ -47,12 +56,11 @@ export default function HomePage() {
                         </p>
                     )}
 
-                    {tools.map((tool) => (
+                    {filteredTools.map((tool) => (
                         <ToolCard
                             key={tool.id}
                             nombre={tool.name}
                             precio={tool.pricePerDay}
-                            // 👇 CORRECCIÓN AQUÍ TAMBIÉN
                             imagen={tool.imageUrl || "https://placehold.co/300x200?text=Sin+Imagen"}
                             disponible={tool.status === 'AVAILABLE'}
                         />
