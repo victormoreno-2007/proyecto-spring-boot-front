@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import AppRouter from './routes/AppRouter';
 import './index.css'; // Importamos los estilos globales aquí
+import { CartProvider } from './contexts/CartContext';
 
 function App() {
   return (
@@ -9,8 +10,13 @@ function App() {
     <BrowserRouter>
       
       <AuthProvider>
-        
-        <AppRouter />
+
+        {/* 👇 El CartProvider debe estar DENTRO del AuthProvider */}
+        <CartProvider>
+
+          <AppRouter />
+          
+        </CartProvider>
         
       </AuthProvider>
       

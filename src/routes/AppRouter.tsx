@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/login/LoginPage';
 import UsersPage from '../pages/user/UsersPage';
 
-
 import MainLayout from '../layouts/MainLayout';
 import PrivateRoute from './PrivateRoute';
 
@@ -11,27 +10,26 @@ import HomePage from '../pages/home/HomePage';
 import RegisterPage from '../pages/resgister/RegisterPage';
 import { CreateToolPage } from '../pages/provider/CreateToolPage';
 import { EditToolPage } from '../pages/provider/EditToolPage';
-import MyBookingsPage from '../client/MyBookingsPage';
-import AdminReportsPage from '../pages/admin/AdminReportsPage';
-import ProfilePage from '../pages/profile/ProfilePage';
+// 👇 CORREGIDO: La ruta debe apuntar a ../pages/client/...
+import MyBookingsPage from '../pages/client/MyBookingPage';
+// Si aún no tienes estas páginas (AdminReports, Profile), coméntalas para evitar errores
+// import AdminReportsPage from '../pages/admin/AdminReportsPage';
+// import ProfilePage from '../pages/profile/ProfilePage';
+import CartPage from '../pages/client/CartPage'; 
 
 export default function AppRouter() {
     return (
         <Routes>
-
+            {/* RUTAS PÚBLICAS */}
             <Route element={<MainLayout />}>
-
-
                 <Route path="/" element={<HomePage />} />
-
-
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-
             </Route>
 
             {/* RUTAS PRIVADAS (Protegidas) */}
             <Route element={<MainLayout />}>
+                {/* ADMIN */}
                 <Route
                     path="/admin/users"
                     element={
@@ -40,6 +38,8 @@ export default function AppRouter() {
                         </PrivateRoute>
                     }
                 />
+                
+                {/* CLIENTE */}
                 <Route
                     path="/my-home"
                     element={
@@ -48,6 +48,17 @@ export default function AppRouter() {
                         </PrivateRoute>
                     }
                 />
+                {/* 👇 FALTABA AGREGAR ESTA RUTA PARA EL CARRITO */}
+                <Route
+                    path="/cart"
+                    element={
+                        <PrivateRoute>
+                            <CartPage />
+                        </PrivateRoute>
+                    }
+                />
+
+                {/* PROVEEDOR */}
                 <Route
                     path="/my-inventory"
                     element={
@@ -56,7 +67,6 @@ export default function AppRouter() {
                         </PrivateRoute>
                     }
                 />
-
                 <Route
                     path="/create-tool"
                     element={
@@ -65,7 +75,6 @@ export default function AppRouter() {
                         </PrivateRoute>
                     }
                 />
-
                 <Route
                     path="/edit-tool/:id"
                     element={
@@ -74,7 +83,9 @@ export default function AppRouter() {
                         </PrivateRoute>
                     }
                 />
-                <Route path="/admin/reports" element={
+
+                {/* Rutas futuras (Descomentar cuando crees los archivos) */}
+                {/* <Route path="/admin/reports" element={
                     <PrivateRoute>
                         <AdminReportsPage />
                     </PrivateRoute>
@@ -86,12 +97,11 @@ export default function AppRouter() {
                             <ProfilePage />
                         </PrivateRoute>
                     }
-                />
+                /> 
+                */}
             </Route>
 
-
-
-
+            {/* CUALQUIER OTRA RUTA -> HOME */}
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );

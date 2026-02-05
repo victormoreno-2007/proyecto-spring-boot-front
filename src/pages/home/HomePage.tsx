@@ -59,6 +59,7 @@ export default function HomePage() {
                     {filteredTools.map((tool) => (
                         <ToolCard
                             key={tool.id}
+                            id={tool.id}
                             nombre={tool.name}
                             precio={tool.pricePerDay}
                             imagen={tool.imageUrl || "https://placehold.co/300x200?text=Sin+Imagen"}
