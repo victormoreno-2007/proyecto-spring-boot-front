@@ -1,18 +1,19 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { Tool } from '../services/toolService';
 
-
-// 1. Interfaz del Ítem con cantidad
+// 1. Ahora el Ítem guarda sus propias fechas
 export interface CartItem extends Tool {
     quantity: number;
+    startDate?: string; // Fecha inicio específica de este ítem
+    endDate?: string;   // Fecha fin específica de este ítem
 }
 
-// 2. Definimos qué funciones tendrá nuestro contexto
 interface CartContextType {
     cart: CartItem[];
     addToCart: (tool: Tool) => void;
     removeFromCart: (toolId: string) => void;
-    updateQuantity: (toolId: string, quantity: number) => void; // <--- FALTABA ESTA
+    updateQuantity: (toolId: string, quantity: number) => void;
+    updateDates: (toolId: string, startDate: string, endDate: string) => void; // <--- NUEVA FUNCIÓN
     clearCart: () => void;
     isInCart: (toolId: string) => boolean;
 }
@@ -31,21 +32,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     
     const addToCart = (tool: Tool) => {
         if (!tool.id) return;
-        
-        // Verificamos si ya existe
         const existingItem = cart.find(item => item.id === tool.id);
 
         if (existingItem) {
-            // Si ya existe, le sumamos 1 a la cantidad
             setCart(cart.map(item => 
-                item.id === tool.id 
-                ? { ...item, quantity: item.quantity + 1 } 
-                : item
+                item.id === tool.id ? { ...item, quantity: item.quantity + 1 } : item
             ));
         } else {
-            // Si es nuevo, lo agregamos e INICIALIZAMOS quantity en 1
-            // (Esto soluciona el error de TypeScript)
-            setCart([...cart, { ...tool, quantity: 1 }]);
+            // Inicializamos sin fechas para que el usuario las elija
+            setCart([...cart, { ...tool, quantity: 1, startDate: '', endDate: '' }]);
         }
     };
 
@@ -53,11 +48,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setCart(cart.filter(item => item.id !== toolId));
     };
 
-    // 👇 ESTA ES LA FUNCIÓN NUEVA PARA LOS BOTONES +/-
     const updateQuantity = (toolId: string, quantity: number) => {
-        if (quantity < 1) return; // Evitamos negativos
+        if (quantity < 1) return; 
         setCart(cart.map(item => 
             item.id === toolId ? { ...item, quantity } : item
+        ));
+    };
+
+    // 👇 AQUÍ GUARDAMOS LAS FECHAS INDIVIDUALES
+    const updateDates = (toolId: string, startDate: string, endDate: string) => {
+        setCart(cart.map(item => 
+            item.id === toolId ? { ...item, startDate, endDate } : item
         ));
     };
 
@@ -70,7 +71,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, isInCart }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, updateDates, clearCart, isInCart }}>
             {children}
         </CartContext.Provider>
     );
