@@ -15,7 +15,8 @@ import MyBookingsPage from '../pages/client/MyBookingPage';
 // Si aún no tienes estas páginas (AdminReports, Profile), coméntalas para evitar errores
 // import AdminReportsPage from '../pages/admin/AdminReportsPage';
 // import ProfilePage from '../pages/profile/ProfilePage';
-import CartPage from '../pages/client/CartPage'; 
+import CartPage from '../pages/client/CartPage';
+import RentalManagementPage from '../pages/provider/RentalManagementPage';
 
 export default function AppRouter() {
     return (
@@ -38,7 +39,7 @@ export default function AppRouter() {
                         </PrivateRoute>
                     }
                 />
-                
+
                 {/* CLIENTE */}
                 <Route
                     path="/my-home"
@@ -84,21 +85,14 @@ export default function AppRouter() {
                     }
                 />
 
-                {/* Rutas futuras (Descomentar cuando crees los archivos) */}
-                {/* <Route path="/admin/reports" element={
-                    <PrivateRoute>
-                        <AdminReportsPage />
-                    </PrivateRoute>
-                } />
                 <Route
-                    path="/profile"
+                    path="/my-rentals"
                     element={
                         <PrivateRoute>
-                            <ProfilePage />
+                            <RentalManagementPage />
                         </PrivateRoute>
                     }
-                /> 
-                */}
+                />
             </Route>
 
             {/* CUALQUIER OTRA RUTA -> HOME */}

@@ -1,12 +1,12 @@
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useCart } from '../../contexts/CartContext'; // <--- 1. Importar Contexto
+import { useCart } from '../../contexts/CartContext'; 
 import { useState, useRef, useEffect } from 'react';
 import '../../styles/header.css';
 
 const Header = () => {
   const { isAuthenticated, logout, user } = useAuth();
-  const { cart, clearCart } = useCart(); // <--- 2. Usar el carrito
+  const { cart, clearCart } = useCart(); 
   const navigate = useNavigate();
   const location = useLocation(); 
   const [, setSearchParams] = useSearchParams(); 
@@ -15,7 +15,6 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Calcular total de artículos (suma de cantidades)
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   useEffect(() => {
@@ -47,7 +46,7 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    clearCart(); // <--- BORRA EL CARRITO
+    clearCart(); 
     navigate("/");
     setTimeout(() => {
       logout();
@@ -74,11 +73,63 @@ const Header = () => {
             <button type="submit" className="search-btn">🔍</button>
         </form>
 
-        {/* 3. ZONA DERECHA */}
+        {/* 2. MENÚ DE NAVEGACIÓN CENTRAL (DINÁMICO SEGÚN ROL) */}
+        <div className="inspiring-message" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+          <nav className="nav-menu">
+            <ul style={{ display: 'flex', gap: '20px', listStyle: 'none', margin: 0, padding: 0 }}>
+               
+              {/* MENÚ PARA ADMINISTRADOR */}
+              {isAuthenticated && user?.role === 'ADMIN' && (
+                <li>
+                    <Link to="/admin/users" style={{ color: '#fdc500', textDecoration: 'none', fontWeight: 'bold' }}>
+                      👥 Usuarios
+                    </Link>
+                </li>
+              )}
+
+              {/* MENÚ PARA PROVEEDOR */}
+              {isAuthenticated && user?.role === 'PROVIDER' && (
+                <>
+                  <li>
+                    <Link to="/my-inventory" className="nav-item" style={{ color: 'white' }}>
+                      📦 Mi Inventario
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/my-rentals" className="nav-item" style={{ color: 'white', fontWeight: 500 }}>
+                      🤝 Mis Rentas
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/create-tool" className="nav-item" style={{ color: '#fdc500', fontWeight: 'bold' }}>
+                      ➕ Publicar Herramienta
+                    </Link>
+                  </li>
+                </>
+              )}
+
+              {/* MENÚ PARA CLIENTE */}
+              {isAuthenticated && user?.role === 'CUSTOMER' && (
+                <>
+                 <li>
+                  <Link to="/" className="nav-item" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>
+                  Inicio
+                  </Link>
+                </li>
+                  <li>
+                    <Link to="/my-home" style={{ color: '#fdc500', textDecoration: 'none', fontWeight: 'bold' }}>
+                      📅 Mis Reservas
+                    </Link>
+                  </li>
+                </>
+              )}
+
+            </ul>
+          </nav>
+        </div>
+
         <div className="right-section">
-          
-          {/* 👇 BOTÓN DEL CARRITO CON CONTADOR */}
-          {isAuthenticated && user?.role === 'CUSTOMER' && (
+            {isAuthenticated && user?.role === 'CUSTOMER' && (
              <Link to="/cart" style={{ position: 'relative', textDecoration: 'none', marginRight: '15px' }}>
                 <span style={{ fontSize: '1.8rem' }}>🛒</span>
                 {totalItems > 0 && (
@@ -120,18 +171,15 @@ const Header = () => {
                     <div className="user-name-display">{user?.firstName} {user?.lastName}</div>
                     <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'center', marginBottom: '10px' }}>{user?.email}</div>
                     
-                    {/* Enlaces según rol */}
+                    {/* Enlaces rápidos del Dropdown */}
                     {user?.role === 'CUSTOMER' && (
-                        <Link to="/my-home" className="dropdown-item">📅 Mis Reservas</Link>
+                        <Link to="/my-home" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>📅 Mis Reservas</Link>
                     )}
                     {user?.role === 'PROVIDER' && (
-                        <Link to="/my-inventory" className="dropdown-item">📦 Mi Inventario</Link>
+                        <Link to="/my-inventory" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>📦 Mi Inventario</Link>
                     )}
-                    {user?.role === 'ADMIN' && (
-                         <Link to="/admin/users" className="dropdown-item">👥 Usuarios</Link>
-                    )}
-
-                    <Link to="/profile" className="dropdown-item"><span>✏️</span> Editar Perfil</Link>
+                    
+                    <Link to="/profile" className="dropdown-item" onClick={() => setIsMenuOpen(false)}><span>✏️</span> Editar Perfil</Link>
                     <div className="dropdown-divider"></div>
                     <button onClick={handleLogout} className="btn-logout-dropdown">Cerrar Sesión</button>
                   </div>

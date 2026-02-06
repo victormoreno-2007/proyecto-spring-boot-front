@@ -48,5 +48,12 @@ export const bookingService = {
             paymentId: `PAY-${Date.now()}-${paymentMethod}` 
         };
         await api.post(`/bookings/${bookingId}/confirm-payment`, payload);
+    },
+    async getProviderBookings(providerId: string) {
+        const response = await api.get<Booking[]>(`/bookings/provider/${providerId}`);
+        return response.data;
+    },
+    async registerReturn(bookingId: string, data: { withDamage: boolean; damageDescription: string; repairCost: number }) {
+        await api.post(`/bookings/${bookingId}/return`, data);
     }
 };
