@@ -1,0 +1,245 @@
+/* CONTENEDOR PRINCIPAL */
+.cart-page-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cart-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start; /* Para que el sticky funcione */
+}
+
+.cart-items-column {
+    flex: 2; /* Ocupa 2/3 del espacio */
+}
+
+.cart-summary-column {
+    flex: 1; /* Ocupa 1/3 del espacio */
+}
+
+/* TARJETA DE PRODUCTO */
+.cart-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.cart-card.unselected {
+    opacity: 0.6;
+    background: #f9fafb;
+}
+
+.cart-card-header, .cart-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stock-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* CONTROLES DE CANTIDAD */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    overflow: hidden;
+}
+
+.quantity-controls button {
+    padding: 5px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.quantity-controls button:hover {
+    background: #f3f4f6;
+}
+
+.quantity-controls span {
+    padding: 0 5px;
+    min-width: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* PRECIO */
+.price-info {
+    text-align: right;
+    min-width: 90px;
+}
+
+.total-price {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--imperial-blue, #0056b3);
+}
+
+.unit-price {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.btn-delete-item {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.btn-delete-item:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* TARJETA DE RESUMEN (Sticky) */
+.summary-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 20px; /* ¡Se pega al hacer scroll! */
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+}
+
+.cart-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+}
+/* Espacio para el botón de Seleccionar Todo */
+.cart-actions-header {
+    display: flex;
+    justify-content: flex-end; /* Alinea el botón a la derecha */
+    margin-bottom: 1.5rem;     /* Espacio DEBAJO del botón (hacia las tarjetas) */
+    margin-top: 0.5rem;        /* Espacio ARRIBA del botón (hacia el título) */
+}
+
+.btn-select-all {
+    background: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+    padding: 8px 16px;
+    border-radius: 20px; /* Bordes redondeados modernos */
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-select-all:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   📱 RESPONSIVE DESIGN (CELULAR)
+   ========================================= */
+@media (max-width: 768px) {
+    .cart-page-container {
+        padding: 1rem;
+    }
+
+    .cart-layout {
+        flex-direction: column; /* Apilar Columnas */
+    }
+
+    .cart-items-column, .cart-summary-column {
+        width: 100%;
+    }
+
+    /* Transformar la Tarjeta del Producto */
+    .cart-card {
+        flex-direction: column; /* De fila a columna */
+        align-items: flex-start;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+
+    .cart-card-header {
+        width: 100%;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .cart-card-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Mover el botón de borrar arriba a la derecha */
+    .btn-delete-item {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    
+    /* Ajustar tamaños de fuente para móvil */
+    .total-price {
+        font-size: 1rem;
+    }
+    
+    .summary-card {
+        position: static; /* En móvil no queremos que sea sticky porque tapa la pantalla */
+    }
+
+
+}

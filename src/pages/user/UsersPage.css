@@ -265,3 +265,13 @@
     gap: 0.5rem;
 }
 .btn-create:hover { background-color: #059669; }
+
+.form-input{
+        width: '100%';
+        padding: '12px'; 
+        border-radius: '8px'; 
+        border: '1px solid #e5e7eb';
+        background: '#f9fafb';
+        font-family: 'inherit';
+        margin-top: '5px';
+}

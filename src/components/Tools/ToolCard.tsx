@@ -8,9 +8,10 @@ interface ToolCardProps {
   precio: number;
   imagen: string;
   disponible: boolean;
+  stock?: number;
 }
 
-const ToolCard = ({ id, nombre, precio, imagen, disponible }: ToolCardProps) => {
+const ToolCard = ({ id, nombre, precio, imagen, disponible, stock }: ToolCardProps) => {
   const { isAuthenticated } = useAuth();
   const { addToCart, isInCart } = useCart();
   const navigate = useNavigate();
@@ -32,7 +33,8 @@ const ToolCard = ({ id, nombre, precio, imagen, disponible }: ToolCardProps) => 
         } else {
             addToCart({ 
                 id, name: nombre, pricePerDay: precio, imageUrl: imagen, 
-                description: '', providerId: '', status: 'AVAILABLE' 
+                description: '', providerId: '', status: 'AVAILABLE',
+                stock: stock
             });
         }
     }

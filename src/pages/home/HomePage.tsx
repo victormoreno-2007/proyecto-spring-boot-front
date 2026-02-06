@@ -64,6 +64,7 @@ export default function HomePage() {
                             precio={tool.pricePerDay}
                             imagen={tool.imageUrl || "https://placehold.co/300x200?text=Sin+Imagen"}
                             disponible={tool.status === 'AVAILABLE'}
+                            stock={tool.stock}
                         />
                     ))}
                 </div>
