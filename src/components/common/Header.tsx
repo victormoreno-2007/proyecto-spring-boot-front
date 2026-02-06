@@ -6,7 +6,7 @@ import '../../styles/header.css';
 
 const Header = () => {
   const { isAuthenticated, logout, user } = useAuth();
-  const { cart } = useCart(); // <--- 2. Usar el carrito
+  const { cart, clearCart } = useCart(); // <--- 2. Usar el carrito
   const navigate = useNavigate();
   const location = useLocation(); 
   const [, setSearchParams] = useSearchParams(); 
@@ -47,8 +47,11 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
+    clearCart(); // <--- BORRA EL CARRITO
     navigate("/");
-    setTimeout(() => logout(), 100);
+    setTimeout(() => {
+      logout();
+    }, 100);
   };
 
   return (

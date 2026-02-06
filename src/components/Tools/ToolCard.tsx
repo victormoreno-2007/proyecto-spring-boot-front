@@ -51,7 +51,7 @@ const ToolCard = ({ id, nombre, precio, imagen, disponible, stock }: ToolCardPro
         />
 
         {/* 👇 AQUÍ ESTÁ LA MAGIA: LA BURBUJA VERDE TIPO RAPPI */}
-        {quantityInCart > 0 && (
+        {isAuthenticated && quantityInCart > 0 && (
             <div style={{
                 position: 'absolute',
                 top: '10px',
@@ -108,7 +108,7 @@ const ToolCard = ({ id, nombre, precio, imagen, disponible, stock }: ToolCardPro
           onClick={handleAction}
         >
           {/* Cambiamos el texto para invitar a agregar más */}
-          {!disponible ? 'No disponible' : (quantityInCart > 0 ? 'Agregar otro ➕' : 'Agregar al Carrito')}
+          {!disponible ? 'No disponible' : (isAuthenticated && quantityInCart > 0 ? 'Agregar otro ➕' : 'Agregar al Carrito')}
         </button>
       </div>
     </div>
