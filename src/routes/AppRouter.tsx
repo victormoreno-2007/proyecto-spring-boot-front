@@ -17,6 +17,7 @@ import MyBookingsPage from '../pages/client/MyBookingPage';
 // import ProfilePage from '../pages/profile/ProfilePage';
 import CartPage from '../pages/client/CartPage';
 import RentalManagementPage from '../pages/provider/RentalManagementPage';
+import AdminReportsPage from '../pages/admin/AdminReportsPage';
 
 export default function AppRouter() {
     return (
@@ -36,6 +37,14 @@ export default function AppRouter() {
                     element={
                         <PrivateRoute>
                             <UsersPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/admin/reports"
+                    element={
+                        <PrivateRoute>
+                            <AdminReportsPage />
                         </PrivateRoute>
                     }
                 />

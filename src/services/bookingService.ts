@@ -55,5 +55,12 @@ export const bookingService = {
     },
     async registerReturn(bookingId: string, data: { withDamage: boolean; damageDescription: string; repairCost: number }) {
         await api.post(`/bookings/${bookingId}/return`, data);
+    },
+    async approveBooking(bookingId: string) {
+        await api.post(`/bookings/${bookingId}/approve`);
+    },
+
+    async rejectBooking(bookingId: string) {
+        await api.post(`/bookings/${bookingId}/reject`);
     }
 };

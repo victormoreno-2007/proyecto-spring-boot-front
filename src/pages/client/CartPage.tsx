@@ -70,9 +70,11 @@ export default function CartPage() {
             else itemsToPay.forEach(item => removeFromCart(item.id!));
             
             navigate('/my-home');
-        } catch (error) {
-            console.error(error);
-            alert("⚠️ Error procesando el pago. Verifica disponibilidad.");
+        } catch (error: any) {
+
+            const backendMessage = error.response?.data?.message;
+            const finalMessage = backendMessage || "Error procesando el pago. Verifica disponibilidad.";
+            alert("⚠️ No se pudo realizar la reserva: \n" + finalMessage);
         }
     };
 

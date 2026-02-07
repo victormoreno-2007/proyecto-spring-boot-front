@@ -1,15 +1,15 @@
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useCart } from '../../contexts/CartContext'; 
+import { useCart } from '../../contexts/CartContext';
 import { useState, useRef, useEffect } from 'react';
 import '../../styles/header.css';
 
 const Header = () => {
   const { isAuthenticated, logout, user } = useAuth();
-  const { cart, clearCart } = useCart(); 
+  const { cart, clearCart } = useCart();
   const navigate = useNavigate();
-  const location = useLocation(); 
-  const [, setSearchParams] = useSearchParams(); 
+  const location = useLocation();
+  const [, setSearchParams] = useSearchParams();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,9 +21,9 @@ const Header = () => {
     const searchablePaths = ['/', '/my-inventory', '/admin/users'];
     if (!searchablePaths.includes(location.pathname)) return;
     const timeoutId = setTimeout(() => {
-        if (searchTerm) setSearchParams({ q: searchTerm });
-        else setSearchParams({});
-    }, 300); 
+      if (searchTerm) setSearchParams({ q: searchTerm });
+      else setSearchParams({});
+    }, 300);
     return () => clearTimeout(timeoutId);
   }, [searchTerm, location.pathname, setSearchParams]);
 
@@ -31,7 +31,7 @@ const Header = () => {
     e.preventDefault();
     const searchablePaths = ['/', '/my-inventory', '/admin/users'];
     if (!searchablePaths.includes(location.pathname)) {
-        navigate(`/?q=${searchTerm}`);
+      navigate(`/?q=${searchTerm}`);
     }
   };
 
@@ -46,7 +46,7 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    clearCart(); 
+    clearCart();
     navigate("/");
     setTimeout(() => {
       logout();
@@ -66,27 +66,34 @@ const Header = () => {
 
         {/* BARRA DE BÚSQUEDA */}
         <form onSubmit={handleSearch} className="search-container">
-            <input 
-                type="text" className="search-input" placeholder="Buscar..."
-                value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button type="submit" className="search-btn">🔍</button>
+          <input
+            type="text" className="search-input" placeholder="Buscar..."
+            value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button type="submit" className="search-btn">🔍</button>
         </form>
 
         {/* 2. MENÚ DE NAVEGACIÓN CENTRAL (DINÁMICO SEGÚN ROL) */}
         <div className="inspiring-message" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
           <nav className="nav-menu">
-            <ul style={{ display: 'flex', gap: '20px', listStyle: 'none', margin: 0, padding: 0 }}>
-               
+            <ul style={{ display: 'flex', gap: '40px', listStyle: 'none', margin: 0, padding: 0 }}>
+
               {/* MENÚ PARA ADMINISTRADOR */}
               {isAuthenticated && user?.role === 'ADMIN' && (
-                <li>
+                <>
+                  <li>
                     <Link to="/admin/users" style={{ color: '#fdc500', textDecoration: 'none', fontWeight: 'bold' }}>
                       👥 Usuarios
                     </Link>
-                </li>
+                  </li>
+                  {/* 👇 AGREGAR ESTO */}
+                  <li>
+                    <Link to="/admin/reports" style={{ color: 'white', fontWeight: 'bold' }}>
+                      📊 Reportes
+                    </Link>
+                  </li>
+                </>
               )}
-
               {/* MENÚ PARA PROVEEDOR */}
               {isAuthenticated && user?.role === 'PROVIDER' && (
                 <>
@@ -111,11 +118,11 @@ const Header = () => {
               {/* MENÚ PARA CLIENTE */}
               {isAuthenticated && user?.role === 'CUSTOMER' && (
                 <>
-                 <li>
-                  <Link to="/" className="nav-item" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>
-                  Inicio
-                  </Link>
-                </li>
+                  <li>
+                    <Link to="/" className="nav-item" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>
+                      Inicio
+                    </Link>
+                  </li>
                   <li>
                     <Link to="/my-home" style={{ color: '#fdc500', textDecoration: 'none', fontWeight: 'bold' }}>
                       📅 Mis Reservas
@@ -129,26 +136,26 @@ const Header = () => {
         </div>
 
         <div className="right-section">
-            {isAuthenticated && user?.role === 'CUSTOMER' && (
-             <Link to="/cart" style={{ position: 'relative', textDecoration: 'none', marginRight: '15px' }}>
-                <span style={{ fontSize: '1.8rem' }}>🛒</span>
-                {totalItems > 0 && (
-                    <span style={{
-                        position: 'absolute',
-                        top: '-5px',
-                        right: '-10px',
-                        backgroundColor: '#ef4444', // Rojo
-                        color: 'white',
-                        borderRadius: '50%',
-                        padding: '2px 6px',
-                        fontSize: '0.75rem',
-                        fontWeight: 'bold',
-                        border: '2px solid var(--imperial-blue)'
-                    }}>
-                        {totalItems}
-                    </span>
-                )}
-             </Link>
+          {isAuthenticated && user?.role === 'CUSTOMER' && (
+            <Link to="/cart" style={{ position: 'relative', textDecoration: 'none', marginRight: '15px' }}>
+              <span style={{ fontSize: '1.8rem' }}>🛒</span>
+              {totalItems > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-10px',
+                  backgroundColor: '#ef4444', // Rojo
+                  color: 'white',
+                  borderRadius: '50%',
+                  padding: '2px 6px',
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  border: '2px solid var(--imperial-blue)'
+                }}>
+                  {totalItems}
+                </span>
+              )}
+            </Link>
           )}
 
           <div className="auth-buttons">
@@ -170,15 +177,15 @@ const Header = () => {
                   <div className="dropdown-box">
                     <div className="user-name-display">{user?.firstName} {user?.lastName}</div>
                     <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'center', marginBottom: '10px' }}>{user?.email}</div>
-                    
+
                     {/* Enlaces rápidos del Dropdown */}
                     {user?.role === 'CUSTOMER' && (
-                        <Link to="/my-home" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>📅 Mis Reservas</Link>
+                      <Link to="/my-home" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>📅 Mis Reservas</Link>
                     )}
                     {user?.role === 'PROVIDER' && (
-                        <Link to="/my-inventory" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>📦 Mi Inventario</Link>
+                      <Link to="/my-inventory" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>📦 Mi Inventario</Link>
                     )}
-                    
+
                     <Link to="/profile" className="dropdown-item" onClick={() => setIsMenuOpen(false)}><span>✏️</span> Editar Perfil</Link>
                     <div className="dropdown-divider"></div>
                     <button onClick={handleLogout} className="btn-logout-dropdown">Cerrar Sesión</button>

@@ -37,8 +37,12 @@ export const InventoryPage = () => {
     try {
       await toolService.deleteTool(id);
       setTools(tools.filter(t => t.id !== id));
-    } catch (error) {
-      alert("Error al eliminar");
+      alert("✅ Herramienta eliminada correctamente");
+    } catch (error: any) {
+      console.error("Error eliminando:", error);
+      const mensajeBackend = error.response?.data?.message;
+      const mensajeFinal = mensajeBackend || "No se pudo eliminar la herramienta. Intente nuevamente.";
+      alert("⚠️ " + mensajeFinal);
     }
   }
 

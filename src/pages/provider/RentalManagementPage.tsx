@@ -24,7 +24,7 @@ export default function RentalManagementPage() {
         try {
             const data = await bookingService.getProviderBookings(user.id);
             // Ordenar: Pendientes y Confirmadas primero
-            setRentals(data.sort((a, b) => (a.status === 'COMPLETED' ? 1 : -1)));
+            setRentals(data.sort((a) => (a.status === 'COMPLETED' ? 1 : -1)));
         } catch (error) {
             console.error(error);
         } finally {
@@ -107,10 +107,44 @@ export default function RentalManagementPage() {
                             <span className="status-badge">{rental.status}</span>
                             
                             {/* Solo mostramos el botón si la reserva está activa (CONFIRMED) */}
+                            {rental.status === 'PENDING' && (
+                                <div style={{display:'flex', gap:'8px', marginTop:'5px'}}>
+                                    <button 
+                                        className="btn"
+                                        style={{padding:'6px 12px', fontSize:'0.85rem', background:'#10b981', color:'white'}} // Verde
+                                        onClick={async () => {
+                                            if(!confirm("¿Aprobar esta reserva?")) return;
+                                            try {
+                                                await bookingService.approveBooking(rental.id);
+                                                alert("✅ Reserva Aprobada");
+                                                loadRentals(); // Recargar lista
+                                            } catch (e) { alert("Error al aprobar"); }
+                                        }}
+                                    >
+                                        ✅ Aprobar
+                                    </button>
+
+                                    <button 
+                                        className="btn"
+                                        style={{padding:'6px 12px', fontSize:'0.85rem', background:'#ef4444', color:'white'}} // Rojo
+                                        onClick={async () => {
+                                            if(!confirm("¿Rechazar esta reserva? Se cancelará.")) return;
+                                            try {
+                                                await bookingService.rejectBooking(rental.id);
+                                                alert("🚫 Reserva Rechazada");
+                                                loadRentals(); // Recargar lista
+                                            } catch (e) { alert("Error al rechazar"); }
+                                        }}
+                                    >
+                                        🚫 Rechazar
+                                    </button>
+                                </div>
+                            )}
+                            {/* CASO 2: RESERVA CONFIRMADA (Recibir Herramienta) */}
                             {rental.status === 'CONFIRMED' && (
                                 <button 
                                     className="btn btn-primary"
-                                    style={{fontSize:'0.9rem', padding:'8px 16px'}}
+                                    style={{fontSize:'0.9rem', padding:'8px 16px', marginTop:'5px'}}
                                     onClick={() => setSelectedBooking(rental)}
                                 >
                                     📥 Recibir Herramienta
