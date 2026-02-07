@@ -46,8 +46,16 @@ export const toolService = {
     },
 
     // En toolService.ts
-async getAllTools() {
+    async getAllTools() {
         const response = await api.get<Tool[]>('/tools');
         return response.data;
+    },
+    searchTools: async (query: string): Promise<Tool[]> => {
+    if (!query.trim()) {
+        const response = await api.get('/tools');
+        return response.data;
     }
+    const response = await api.get(`/tools/search?name=${query}`);
+    return response.data;
+  }
 };

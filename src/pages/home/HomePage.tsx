@@ -3,34 +3,37 @@ import ToolCard from "../../components/Tools/ToolCard";
 import { toolService, type Tool } from '../../services/toolService';
 import { useSearchParams } from 'react-router-dom';
 
+
 export default function HomePage() {
     const [tools, setTools] = useState<Tool[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchParams] = useSearchParams();
-
-    const searchTerm = searchParams.get('q')?.toLowerCase() || '';
+    const [searchParams] = useSearchParams(); 
+    const queryEnUrl = searchParams.get('q');
     
-    const filteredTools = tools.filter(tool => 
-        tool.name.toLowerCase().includes(searchTerm) || 
-        tool.description.toLowerCase().includes(searchTerm)
-    );
-
     useEffect(() => {
-        loadCatalog();
-    }, []);
+        const fetchTools = async () => {
+            try {
+                if (queryEnUrl) {
+                    // A. Si hay búsqueda en la URL, llamamos al Buscador del Backend
+                    console.log("🔍 Buscando en servidor:", queryEnUrl);
+                    const resultados = await toolService.searchTools(queryEnUrl);
+                    setTools(resultados);
+                } else {
+                    // B. Si la URL está limpia, traemos todo el catálogo
+                    const data = await toolService.getAllTools();
+                    setTools(data);
+                }
+            } catch (error) {
+                console.error("Error cargando el catálogo:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const loadCatalog = async () => {
-        try {
-            // Llama al método que agregamos al servicio
-            const data = await toolService.getAllTools();
-            setTools(data);
-        } catch (error) {
-            console.error("Error cargando el catálogo:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        fetchTools();
+    }, [queryEnUrl]);
 
+    
     return (
         <div className="container" style={{ padding: '2rem 0' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -56,7 +59,7 @@ export default function HomePage() {
                         </p>
                     )}
 
-                    {filteredTools.map((tool) => (
+                    {tools.map((tool) => (
                         <ToolCard
                             key={tool.id}
                             id={tool.id}
