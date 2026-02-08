@@ -68,6 +68,7 @@ export default function HomePage() {
                             imagen={tool.imageUrl || "https://placehold.co/300x200?text=Sin+Imagen"}
                             disponible={tool.status === 'AVAILABLE'}
                             stock={tool.stock}
+                            description={tool.description}
                         />
                     ))}
                 </div>

@@ -41,6 +41,19 @@ export const CreateToolPage = () => {
         }
     };
 
+    // Función para convertir la imagen a Base64 (Texto)
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // El resultado es un string largo: "data:image/jpeg;base64,/9j/4AAQSk..."
+                setNewTool({ ...newTool, imageUrl: reader.result as string });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
 
         <div className="container" style={{ maxWidth: '600px', padding: '2rem' }}>
@@ -93,14 +106,27 @@ export const CreateToolPage = () => {
                             />
                         </div>
                         <div>
-                            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Imagen (URL)</label>
+                            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Imagen del Producto</label>
+
+                            {/* Input para seleccionar archivo del PC */}
                             <input
-                                type="text"
-                                placeholder="https://..."
-                                style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }}
-                                value={newTool.imageUrl}
-                                onChange={(e) => setNewTool({ ...newTool, imageUrl: e.target.value })}
+                                type="file"
+                                accept="image/*"
+                                className="form-control"
+                                style={{ marginBottom: '10px', width: '100%' }}
+                                onChange={handleImageUpload} // <--- Esta función la agregamos arriba
                             />
+
+                            {/* Previsualización para que veas la foto que subiste */}
+                            {newTool.imageUrl && (
+                                <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                                    <img
+                                        src={newTool.imageUrl}
+                                        alt="Previsualización"
+                                        style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
 
