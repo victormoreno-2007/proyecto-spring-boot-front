@@ -14,7 +14,7 @@ export const EditToolPage = () => {
     imageUrl: '',
     providerId: '',
     status: 'AVAILABLE',
-    stock: 1
+    stock: 1 // Ya lo tenías aquí, ¡bien!
   });
 
   // 1. Cargar datos al entrar
@@ -27,7 +27,8 @@ export const EditToolPage = () => {
   const loadToolData = async (toolId: string) => {
       try {
           const tool = await toolService.getToolById(toolId);
-          setFormData({ ...tool, stock: tool.stock ?? 1 })
+          // Aseguramos que si viene null, se ponga 1
+          setFormData({ ...tool, stock: tool.stock ?? 1 }); 
       } catch (error) {
           alert("Error al cargar la herramienta");
           navigate('/my-inventory');
@@ -73,18 +74,32 @@ export const EditToolPage = () => {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem'}}>
+          {/* 👇 AQUÍ AGREGUÉ EL STOCK (Grid de 3 columnas para que quepa bien) */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem'}}>
             <div>
                 <label style={{fontWeight: 'bold', display: 'block', marginBottom: '5px'}}>Precio (Día)</label>
                 <input 
                 required
                 type="number" 
                 style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }}
-                // El || '' evita el error NaN que te salía en consola
                 value={formData.pricePerDay || ''} 
                 onChange={(e) => setFormData({...formData, pricePerDay: parseFloat(e.target.value)})}
                 />
             </div>
+            
+            {/* 👇 NUEVO CAMPO STOCK */}
+            <div>
+                <label style={{fontWeight: 'bold', display: 'block', marginBottom: '5px'}}>Stock</label>
+                <input 
+                required
+                type="number" 
+                min="0"
+                style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }}
+                value={formData.stock} 
+                onChange={(e) => setFormData({...formData, stock: parseInt(e.target.value) || 0})}
+                />
+            </div>
+
             <div>
                 <label style={{fontWeight: 'bold', display: 'block', marginBottom: '5px'}}>Estado</label>
                 <select 
