@@ -18,6 +18,7 @@ import MyBookingsPage from '../pages/client/MyBookingPage';
 import CartPage from '../pages/client/CartPage';
 import RentalManagementPage from '../pages/provider/RentalManagementPage';
 import AdminReportsPage from '../pages/admin/AdminReportsPage';
+import ProfilePage from '../pages/profile/ProfilePage';
 
 export default function AppRouter() {
     return (
@@ -27,6 +28,7 @@ export default function AppRouter() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path='/profile' element={<ProfilePage/>}/>
             </Route>
 
             {/* RUTAS PRIVADAS (Protegidas) */}
