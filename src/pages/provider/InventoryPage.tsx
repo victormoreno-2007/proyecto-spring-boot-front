@@ -51,7 +51,7 @@ export const InventoryPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 className="page-title" style={{ marginBottom: '0.5rem' }}>📦 Mi Inventario</h1>
-          <p>Gestiona tus {tools.length} herramientas activas.</p>
+          <p> Herramientas activas: {tools.length} </p>
         </div>
         <Link to="/create-tool">
           <button className="btn btn-primary">➕ Nueva Herramienta</button>
