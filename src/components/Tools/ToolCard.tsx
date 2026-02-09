@@ -140,8 +140,11 @@ const ToolCard = ({ id, nombre, precio, imagen, disponible, stock, description }
         <div style={{
             position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
             backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999,
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
-            padding: '20px'
+            display: 'flex', justifyContent: 'center', alignItems: 'flex-start',
+            padding: '20px',
+            paddingTop: '180px',
+            overflowY: 'auto'
+
         }} onClick={() => setShowModal(false)}>
             
             <div style={{

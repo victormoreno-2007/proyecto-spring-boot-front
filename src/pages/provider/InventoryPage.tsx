@@ -59,7 +59,7 @@ export const InventoryPage = () => {
       </div>
 
       {loading ? <p>Cargando inventario...</p> : (
-        <div style={{ background: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+        <div className="table-responsive"> 
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead style={{ background: '#f8f9fa', borderBottom: '2px solid #e9ecef' }}>
               <tr>

@@ -3,7 +3,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { toolService, type Tool } from '../../services/toolService';
 import { useNavigate } from 'react-router-dom';
 
-
 export const CreateToolPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -26,14 +25,14 @@ export const CreateToolPage = () => {
                 description: newTool.description,
                 pricePerDay: Number(newTool.pricePerDay),
                 imageUrl: newTool.imageUrl || "https://placehold.co/300x200?text=Sin+Imagen",
-                providerId: user.id, // Tu ID de Backend
+                providerId: user.id,
                 status: 'AVAILABLE',
                 stock: newTool.stock
             };
 
             await toolService.createTool(toolToSave);
             alert("¡Herramienta publicada con éxito!");
-            navigate('/my-inventory'); // Te lleva al inventario al terminar
+            navigate('/my-inventory');
 
         } catch (error) {
             console.error(error);
@@ -41,13 +40,11 @@ export const CreateToolPage = () => {
         }
     };
 
-    // Función para convertir la imagen a Base64 (Texto)
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                // El resultado es un string largo: "data:image/jpeg;base64,/9j/4AAQSk..."
                 setNewTool({ ...newTool, imageUrl: reader.result as string });
             };
             reader.readAsDataURL(file);
@@ -55,13 +52,13 @@ export const CreateToolPage = () => {
     };
 
     return (
-
-        <div className="container" style={{ maxWidth: '600px', padding: '2rem' }}>
+        <div className="container" style={{ maxWidth: '800px', padding: '2rem' }}>
             <h1 className="page-title">➕ Publicar Nueva Herramienta</h1>
 
             <div style={{ background: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
 
+                    {/* NOMBRE */}
                     <div>
                         <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Nombre del equipo</label>
                         <input
@@ -75,26 +72,28 @@ export const CreateToolPage = () => {
                         />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div>
+                    {/* --- FILA RESPONSIVA (PRECIO, STOCK, IMAGEN) --- */}
+                    {/* Usamos flex-wrap para que bajen en celular */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                        
+                        {/* 1. PRECIO */}
+                        <div style={{ flex: '1 1 200px' }}> {/* <-- ESTO FALTABA: Base 200px, crece si hay espacio */}
                             <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Precio (Día)</label>
                             <input
                                 required
                                 type="number"
                                 placeholder="0.00"
                                 style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }}
-
-                                // 👇 CORRECCIÓN AQUÍ: Si es 0 o NaN, pon comillas vacías ''
                                 value={newTool.pricePerDay || ''}
-
                                 onChange={(e) => setNewTool({
                                     ...newTool,
-                                    // Si el valor es vacío, guardamos 0, si no, lo convertimos a float
                                     pricePerDay: e.target.value === '' ? 0 : parseFloat(e.target.value)
                                 })}
                             />
                         </div>
-                        <div>
+
+                        {/* 2. STOCK */}
+                        <div style={{ flex: '1 1 200px' }}> {/* <-- ESTO FALTABA */}
                             <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Stock Disponible</label>
                             <input
                                 required
@@ -105,31 +104,30 @@ export const CreateToolPage = () => {
                                 onChange={(e) => setNewTool({ ...newTool, stock: parseInt(e.target.value) || 0 })}
                             />
                         </div>
-                        <div>
-                            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Imagen del Producto</label>
 
-                            {/* Input para seleccionar archivo del PC */}
+                        {/* 3. IMAGEN (Ocupa todo el ancho abajo en celular, o comparte en PC grande) */}
+                        <div style={{ flex: '1 1 100%' }}> {/* <-- Forzamos 100% para que la imagen tenga espacio */}
+                            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Imagen del Producto</label>
                             <input
                                 type="file"
                                 accept="image/*"
                                 className="form-control"
                                 style={{ marginBottom: '10px', width: '100%' }}
-                                onChange={handleImageUpload} // <--- Esta función la agregamos arriba
+                                onChange={handleImageUpload}
                             />
-
-                            {/* Previsualización para que veas la foto que subiste */}
                             {newTool.imageUrl && (
-                                <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                                <div style={{ marginTop: '10px', textAlign: 'center', background: '#f9fafb', padding: '10px', borderRadius: '8px' }}>
                                     <img
                                         src={newTool.imageUrl}
                                         alt="Previsualización"
-                                        style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain' }}
                                     />
                                 </div>
                             )}
                         </div>
                     </div>
 
+                    {/* DESCRIPCIÓN */}
                     <div>
                         <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Descripción</label>
                         <textarea
@@ -140,7 +138,7 @@ export const CreateToolPage = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary" style={{ marginTop: '10px', fontSize: '1.1rem' }}>
+                    <button type="submit" className="btn btn-primary" style={{ marginTop: '10px', fontSize: '1.1rem', padding: '12px' }}>
                         Guardar y Publicar
                     </button>
                 </form>

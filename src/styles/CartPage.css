@@ -189,9 +189,68 @@
     transform: translateY(-1px);
 }
 
-/* =========================================
-   📱 RESPONSIVE DESIGN (CELULAR)
-   ========================================= */
+
+.cart-item-details {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end; /* Alinea abajo en PC */
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+/* 1. Fechas */
+.cart-dates {
+    flex: 1; /* Ocupa el espacio disponible en PC */
+    min-width: 250px;
+}
+
+.cart-dates label, 
+.cart-qty label, 
+.cart-subtotal label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #4b5563;
+}
+
+.date-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.date-inputs .form-input {
+    margin: 0;
+    font-size: 0.9rem;
+    padding: 8px;
+}
+
+/* 2. Contenedor de Cantidad y Subtotal */
+.cart-qty-subtotal {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.cart-subtotal {
+    text-align: right;
+    min-width: 100px;
+}
+
+.price-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--imperial-blue);
+}
+
+.arrow {
+    color: #666;
+}
+
 @media (max-width: 768px) {
     .cart-page-container {
         padding: 1rem;
@@ -241,5 +300,39 @@
         position: static; /* En móvil no queremos que sea sticky porque tapa la pantalla */
     }
 
+   
+    .cart-item-details {
+        flex-direction: column; /* Apila todo verticalmente */
+        align-items: stretch;   /* Estira para llenar el ancho */
+        gap: 15px;
+    }
 
+    .cart-dates {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .date-inputs {
+        display: flex;
+        gap: 5px;
+    }
+    
+    .date-inputs .form-input {
+        width: 100%; /* Inputs de fecha ocupan mitad y mitad */
+    }
+
+    /* Fila inferior: Cantidad a la izquierda, Subtotal a la derecha */
+    .cart-qty-subtotal {
+        width: 100%;
+        justify-content: space-between; /* Los separa a los extremos */
+        align-items: center; /* Centrados verticalmente */
+    }
+
+    .cart-subtotal {
+        text-align: right;
+    }
+    
+    .price-value {
+        font-size: 1.1rem;
+    }
 }
