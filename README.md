@@ -1,73 +1,139 @@
-# React + TypeScript + Vite
+# 🎨 ConstruRenta UI - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/React-18-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![Vite](https://img.shields.io/badge/Vite-Fast_Build-purple)
+![CSS](https://img.shields.io/badge/Style-CSS_Modules-orange)
 
-Currently, two official plugins are available:
+Bienvenido a la interfaz de usuario de **ConstruRenta**. Esta aplicación web progresiva (SPA) ha sido diseñada para ofrecer una experiencia fluida, moderna y responsiva, permitiendo la gestión eficiente del alquiler de maquinaria pesada y herramientas.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Desarrollada con **React 18** y **TypeScript**, la aplicación se centra en la usabilidad, la seguridad mediante la gestión de estados globales y la protección de rutas basada en roles.
 
-## React Compiler
+## 🔗 Enlaces del Proyecto
+- **⚙️ Repositorio Backend:** [GitHub - Proyecto Backend](https://github.com/victormoreno-2007/proyecto-spring-boot.git)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 💡 Experiencia de Usuario (UX)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+La plataforma está diseñada pensando en tres perfiles de usuario distintos, ofreciendo interfaces personalizadas para cada uno:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🛡️ Panel de Administrador
+* **Dashboard Visual:** Gráficos y tarjetas estadísticas para monitorear ingresos y usuarios activos.
+* **Gestión Centralizada:** Tablas interactivas para administrar usuarios y reportes de daños.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 👷 Panel de Proveedor
+* **Gestión de Inventario:** Formularios intuitivos para crear y editar herramientas, con previsualización de imágenes en tiempo real.
+* **Control de Rentas:** Vista clara de herramientas alquiladas y gestión de devoluciones.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 👤 Portal del Cliente
+* **Catálogo Dinámico:** Exploración de herramientas con indicadores de stock y disponibilidad en tiempo real.
+* **Proceso de Reserva:** Carrito de compras, selección de fechas mediante calendario y pasarela de pago simulada.
+* **Historial:** Acceso a reservas pasadas y facturas digitales.
+
+---
+
+## 💻 Stack Tecnológico
+
+* **Core:** React 18 + TypeScript (Tipado estricto para mayor robustez).
+* **Build Tool:** Vite (Para un entorno de desarrollo ultrarrápido).
+* **Estilos:** CSS Modules (Estilos encapsulados y mantenibles) + Diseño Responsivo.
+* **Conexión API:** Axios (Configurado con Interceptores para inyectar el Token JWT automáticamente).
+* **Estado Global:** React Context API (Gestión de Autenticación `AuthContext` y Carrito de Compras `CartContext`).
+* **Routing:** React Router DOM v6 (Con componentes `PrivateRoute` para seguridad).
+
+---
+
+## 📂 Estructura del Proyecto
+
+El proyecto sigue una estructura modular y escalable:
+
+```text
+src/
+├── components/       # Bloques de construcción de la UI
+│   ├── common/       # Header, Footer, Modales (Reutilizables)
+│   └── Tools/        # Tarjetas de productos y listados
+│
+├── contexts/         # Gestión del Estado Global
+│   ├── AuthContext   # Manejo de sesión y roles
+│   └── CartContext   # Lógica del carrito de compras
+│
+├── layouts/          # Plantillas maestras (MainLayout)
+│
+├── pages/            # Vistas principales por Rol
+│   ├── admin/        # Reportes y Usuarios
+│   ├── client/       # Home, Carrito, Mis Reservas
+│   ├── provider/     # Inventario, Gestión de Rentas
+│   └── ...           # Login, Registro, Perfil
+│
+├── services/         # Capa de Comunicación con el Backend
+│   ├── api.ts        # Configuración base de Axios
+│   └── ...           # Servicios específicos (toolService, bookingService)
+│
+└── routes/           # Definición de rutas y Guardias de Seguridad
+
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Instrucciones de Instalación
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Sigue estos pasos para desplegar el frontend en tu máquina local:
+
+### 1. Prerrequisitos
+
+* Tener instalado **Node.js** (v16 o superior).
+* Tener el **Backend** ejecutándose en `http://localhost:8080` (Requerido para el Login y datos).
+
+### 2. Clonar e Instalar
+
+```bash
+git clone [https://github.com/victormoreno-2007/proyecto-spring-boot-front.git](https://github.com/victormoreno-2007/proyecto-spring-boot-front.git)
+cd proyecto-spring-boot-front
+npm install
+
+```
+
+### 3. Ejecutar en Desarrollo
+
+```bash
+npm run dev
+
+```
+
+### 4. Acceso
+
+Abre tu navegador (Chrome/Edge recomendado) en:
+👉 `http://localhost:5173`
+
+---
+
+## 🔐 Credenciales de Prueba
+
+El sistema viene pre-cargado con usuarios para probar cada rol inmediatamente:
+
+| Rol | Email | Contraseña | Funcionalidad Principal |
+| --- | --- | --- | --- |
+| **Admin** | `admin@construrenta.com` | `123456` | Ver reportes financieros y usuarios. |
+| **Cliente** | `sebastian@cliente.com` | `123456` | Alquilar herramientas y ver carrito. |
+| **Proveedor** | `marcela@proveedor.com` | `123456` | Crear herramientas y gestionar stock. |
+
+---
+
+## 👥 Equipo de Desarrollo
+
+Este proyecto fue desarrollado con pasión y buenas prácticas por:
+
+| Desarrollador | Rol Principal |
+| --- | --- |
+| **Marcela Albarracin** | 
+| **Sebastian Jaimes** |
+| **Victor Moreno** |
+
+---
+
+*© 2024 ConstruRenta UI - Todos los derechos reservados.*
+
+```
+
 ```
