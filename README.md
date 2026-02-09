@@ -1,73 +1,75 @@
-# React + TypeScript + Vite
+# 🏗️ ConstruRenta UI - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interfaz moderna e intuitiva para la plataforma de alquiler de maquinaria. Desarrollada con **React** y **TypeScript**, enfocada en la experiencia de usuario y la gestión eficiente de roles.
 
-Currently, two official plugins are available:
+## 🔗 Enlaces del Proyecto
+- **Repositorio Backend:** `https://github.com/victormoreno-2007/proyecto-spring-boot.git`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 💻 Tecnologías Utilizadas
+- **Framework:** React 18 + TypeScript
+- **Estilos:** CSS Modules + Diseño Responsivo
+- **Estado y API:** Axios (Interceptores JWT) + Context API
+- **Enrutamiento:** React Router DOM (Protección de rutas por Roles)
+- **Build Tool:** Vite
 
-## React Compiler
+## 📸 Características Visuales
+- **Dashboard Administrativo:** Gráficos y tablas de reportes en tiempo real.
+- **Catálogo Interactivo:** Tarjetas de productos con estados (Disponible/Agotado).
+- **Gestión de Roles:**
+  - 🛡️ **Admin:** Control total de usuarios y reportes.
+  - 👷 **Proveedor:** Gestión de inventario propio.
+  - 👤 **Cliente:** Carrito de compras, reservas e historial.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Instrucciones de Ejecución
 
-## Expanding the ESLint configuration
+### Prerrequisitos
+- Node.js (v16 o superior).
+- Backend ejecutándose en `http://localhost:8080`.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Pasos
+1. **Instalar dependencias:**
+   ```bash
+   npm install
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. **Ejecutar en desarrollo:**
+```bash
+npm run dev
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+
+
+3. **Acceso:**
+Abra su navegador en `http://localhost:5173`.
+
+## 📂 Estructura del Proyecto
+
+```text
+src/
+├── components/   # Componentes reutilizables (Modales, Tarjetas, Header)
+├── contexts/     # Gestión de estado global (Auth, Cart)
+├── layouts/      # Plantillas de diseño (MainLayout)
+├── pages/        # Vistas por rol (Admin, Client, Provider)
+├── services/     # Comunicación con API Backend (Axios)
+└── routes/       # Configuración de Rutas y Guardias de Seguridad
+
+```
+
+## 🔐 Usuarios de Prueba
+
+| Rol | Email | Contraseña |
+| --- | --- | --- |
+| Admin | `admin@construrenta.com` | `123456` |
+| Cliente | `sebastian@cliente.com` | `123456` |
+| Proveedor | `marcela@proveedor.com` | `123456` |
+
+---
+
+**Desarrollado por:** Marcela Albarracin, Sebastian Jaimes y Victor Moreno
+
+```
+
+---
+
+
