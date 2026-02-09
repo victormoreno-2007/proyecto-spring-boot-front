@@ -6,6 +6,8 @@
   padding-top: 3rem;
   margin-top: auto; /* Empuja el footer al fondo si hay poco contenido */
   border-top: 5px solid var(--school-bus-yellow); /* Detalle visual */
+  position: sticky;
+  top: 0;
 }
 
 .footer-grid {

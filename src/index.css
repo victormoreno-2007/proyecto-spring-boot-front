@@ -1,6 +1,5 @@
 /* src/index.css */
 :root {
-  /* 🎨 Paleta de Colores Oficial */
   --imperial-blue: #00296bff;
   --french-blue: #003f88ff;
   --steel-azure: #00509dff;
@@ -15,7 +14,7 @@
   --danger: #dc3545;
   --success: #28a745;
 
-  /* Configuración Global */
+  /* Tipografía Oficial */
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
@@ -26,10 +25,23 @@
   padding: 0;
 }
 
+/* 1. RESET GLOBAL OBLIGATORIO */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   background-color: var(--light-gray);
   color: var(--text-dark);
-  min-height: 100vh;
+}
+
+/* 2. EL CONTENEDOR DE REACT (#root) DEBE CRECER */
+#root {
+  width: 100%;
+  min-height: 100vh;      /* Ocupa al menos toda la pantalla */
+  display: flex;
+  flex-direction: column; /* Obliga a los elementos a apilarse verticalmente */
 }
 
 a {
@@ -37,11 +49,12 @@ a {
   color: inherit;
 }
 
-/* --- CLASES UTILITARIAS (Para que todos las usen) --- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  position: sticky;
+  top: 0;
 }
 
 .btn {
@@ -79,4 +92,5 @@ a {
   border-bottom: 2px solid var(--school-bus-yellow);
   display: inline-block;
   padding-bottom: 5px;
+  z-index: 1;
 }

@@ -1,106 +1,135 @@
-import { useState } from 'react';
-
-// Interfaz TypeScript para definir qué es una herramienta
-interface Tool {
-  id: number;
-  name: string;
-  price: number;
-  status: 'disponible' | 'alquilada' | 'mantenimiento';
-  image: string;
-}
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { toolService, type Tool } from '../../services/toolService';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 export const InventoryPage = () => {
-  // Estado para la lista de herramientas (Simulando base de datos)
-  const [tools, setTools] = useState<Tool[]>([
-    { id: 1, name: 'Martillo Demoledor', price: 50000, status: 'disponible', image: 'https://via.placeholder.com/50' },
-    { id: 2, name: 'Generador Eléctrico', price: 120000, status: 'alquilada', image: 'https://via.placeholder.com/50' },
-  ]);
+  const { user } = useAuth();
+  const [tools, setTools] = useState<Tool[]>([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get('q')?.toLowerCase() || '';
 
-  // Estado para el formulario de crear
-  const [newTool, setNewTool] = useState({ name: '', price: '', description: '' });
+  const filteredTools = tools.filter(tool => 
+      tool.name.toLowerCase().includes(searchTerm)
+  );
+
+  useEffect(() => {
+    if (user?.id) loadMyTools();
+  }, [user]);
+
+  const loadMyTools = async () => {
+    try {
+      if (!user?.id) return;
+      const data = await toolService.getToolsByProvider(user.id);
+      setTools(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("⚠️ ¿Estás seguro de eliminar esta herramienta? Esta acción no se puede deshacer.")) return;
+    try {
+      await toolService.deleteTool(id);
+      setTools(tools.filter(t => t.id !== id));
+      alert("✅ Herramienta eliminada correctamente");
+    } catch (error: any) {
+      console.error("Error eliminando:", error);
+      const mensajeBackend = error.response?.data?.message;
+      const mensajeFinal = mensajeBackend || "No se pudo eliminar la herramienta. Intente nuevamente.";
+      alert("⚠️ " + mensajeFinal);
+    }
+  }
 
   return (
     <div className="container" style={{ padding: '2rem 0' }}>
-      <h1 className="page-title">🛠️ Gestión de Inventario</h1>
-      <p style={{ marginBottom: '2rem' }}>Aquí puedes agregar, editar o dar de baja tus equipos.</p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
-        
-        {/* COLUMNA IZQUIERDA: Formulario de Creación */}
-        <div style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
-          <h3 style={{ color: 'var(--imperial-blue)', marginBottom: '1rem' }}>Agregar Nueva Herramienta</h3>
-          <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            
-            <label>Nombre del equipo</label>
-            <input 
-              type="text" 
-              className="form-control" 
-              placeholder="Ej: Taladro Bosch"
-              style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              value={newTool.name}
-              onChange={(e) => setNewTool({...newTool, name: e.target.value})}
-            />
-
-            <label>Precio de alquiler (diario)</label>
-            <input 
-              type="number" 
-              placeholder="0.00"
-              style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              value={newTool.price}
-              onChange={(e) => setNewTool({...newTool, price: e.target.value})}
-            />
-
-            <label>Descripción</label>
-            <textarea 
-              rows={3} 
-              style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-            />
-
-            <button className="btn btn-primary" style={{ marginTop: '10px' }}>
-              + Publicar Herramienta
-            </button>
-          </form>
-        </div>
-
-        {/* COLUMNA DERECHA: Tabla de herramientas existentes */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h3 style={{ color: 'var(--steel-azure)', marginBottom: '1rem' }}>Mis Herramientas ({tools.length})</h3>
-          <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', borderRadius: '8px', overflow: 'hidden' }}>
-            <thead style={{ background: 'var(--imperial-blue)', color: 'white' }}>
+          <h1 className="page-title" style={{ marginBottom: '0.5rem' }}>📦 Mi Inventario</h1>
+          <p> Herramientas activas: {tools.length} </p>
+        </div>
+        <Link to="/create-tool">
+          <button className="btn btn-primary">➕ Nueva Herramienta</button>
+        </Link>
+      </div>
+
+      {loading ? <p>Cargando inventario...</p> : (
+        <div style={{ background: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead style={{ background: '#f8f9fa', borderBottom: '2px solid #e9ecef' }}>
               <tr>
-                <th style={{ padding: '10px' }}>Img</th>
-                <th style={{ padding: '10px' }}>Nombre</th>
-                <th style={{ padding: '10px' }}>Precio/Día</th>
-                <th style={{ padding: '10px' }}>Estado</th>
-                <th style={{ padding: '10px' }}>Acciones</th>
+                <th style={{ padding: '15px', textAlign: 'left' }}>Producto</th>
+                <th style={{ padding: '15px', textAlign: 'left' }}>Precio/Día</th>
+                <th style={{ padding: '15px', textAlign: 'center' }}>Stock</th>
+                <th style={{ padding: '15px', textAlign: 'center' }}>Estado</th>
+                <th style={{ padding: '15px', textAlign: 'right' }}>Gestión</th>
               </tr>
             </thead>
             <tbody>
-              {tools.map((tool) => (
-                <tr key={tool.id} style={{ borderBottom: '1px solid #eee', textAlign: 'center' }}>
-                  <td style={{ padding: '10px' }}><img src={tool.image} alt="tool" style={{ borderRadius: '4px' }} /></td>
-                  <td style={{ fontWeight: 'bold' }}>{tool.name}</td>
-                  <td>${tool.price.toLocaleString()}</td>
-                  <td>
-                    <span style={{ 
-                      padding: '4px 8px', borderRadius: '12px', fontSize: '0.8rem',
-                      background: tool.status === 'disponible' ? '#d4edda' : '#f8d7da',
-                      color: tool.status === 'disponible' ? '#155724' : '#721c24'
+              {tools.length === 0 && (
+                <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center' }}>No tienes herramientas aún.</td></tr>
+              )}
+              {filteredTools.map((tool) => (
+                <tr key={tool.id} style={{ borderBottom: '1px solid #eee' }}>
+                  <td style={{ padding: '15px', display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <img
+                      src={tool.imageUrl || 'https://via.placeholder.com/50'}
+                      alt="tool"
+                      style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #ddd' }}
+                    />
+                    <div>
+                      <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{tool.name}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#666' }}>{tool.description.substring(0, 40)}...</div>
+                    </div>
+                  </td>
+                  <td style={{ padding: '15px', fontWeight: 'bold', color: 'var(--imperial-blue)' }}>
+                    ${tool.pricePerDay.toLocaleString()}
+                  </td>
+                  <td style={{ padding: '15px', textAlign: 'center', fontSize: '1.1rem', fontWeight: 'bold' }}>
+                    {/* Si tool.stock existe, lo muestra. Si no (porque el back no lo manda), muestra 1 */}
+                     {tool.stock ?? 1} 
+                  </td>
+                  <td style={{ padding: '15px', textAlign: 'center' }}>
+                    <span style={{
+                      padding: '6px 12px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: '600',
+                      background: tool.status === 'AVAILABLE' ? '#d1fae5' : '#fee2e2',
+                      color: tool.status === 'AVAILABLE' ? '#065f46' : '#991b1b'
                     }}>
-                      {tool.status.toUpperCase()}
+                      {tool.status === 'AVAILABLE' ? 'Disponible' : tool.status}
                     </span>
                   </td>
-                  <td>
-                    <button style={{ marginRight: '5px', cursor: 'pointer' }}>✏️</button>
-                    <button style={{ color: 'red', cursor: 'pointer' }}>🗑️</button>
+                  <td style={{ padding: '15px', textAlign: 'right' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                      {/* Botón Editar (Placeholder por ahora) */}
+                      <button
+                        onClick={() => navigate(`/edit-tool/${tool.id}`)}
+                        className="btn"
+                        style={{ padding: '5px 10px', background: '#e0f2fe', color: '#0369a1', marginRight: '5px' }}
+                        title="Editar"
+                      >
+                        ✏️
+                      </button>
+                      {/* Botón Eliminar */}
+                      <button
+                        onClick={() => handleDelete(tool.id!)}
+                        className="btn"
+                        style={{ padding: '5px 10px', background: '#fee2e2', color: '#991b1b' }}
+                      >
+                        🗑️
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-      </div>
+      )}
     </div>
   );
 };
