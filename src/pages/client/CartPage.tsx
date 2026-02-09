@@ -120,28 +120,52 @@ export default function CartPage() {
                                     </div>
                                     <button onClick={() => removeFromCart(item.id!)} className="btn-delete-item">🗑️</button>
                                 </div>
-                                <div style={{display:'flex', gap:'20px', flexWrap:'wrap', alignItems:'end', background:'#f8f9fa', padding:'15px', borderRadius:'8px'}}>
-                                    <div style={{flex: 1, minWidth: '200px'}}>
-                                        <label style={{fontSize:'0.8rem', fontWeight:'bold', display:'block', marginBottom:'5px'}}>📅 Fechas de Alquiler</label>
-                                        <div style={{display:'flex', gap:'10px'}}>
-                                            <input type="date" className="form-input" style={{margin:0, fontSize:'0.9rem'}} min={new Date().toISOString().split('T')[0]} value={item.startDate || ''} onChange={(e) => updateDates(item.id!, e.target.value, item.endDate || '')} />
-                                            <span style={{alignSelf:'center'}}>➜</span>
-                                            <input type="date" className="form-input" style={{margin:0, fontSize:'0.9rem'}} min={item.startDate || new Date().toISOString().split('T')[0]} value={item.endDate || ''} onChange={(e) => updateDates(item.id!, item.startDate || '', e.target.value)} />
+
+                                {/* --- 🛠️ ZONA CORREGIDA (DETALLES RESPONSIVOS) --- */}
+                                <div className="cart-item-details">
+                                    
+                                    {/* 1. SECCIÓN FECHAS */}
+                                    <div className="cart-dates">
+                                        <label>📅 Fechas de Alquiler</label>
+                                        <div className="date-inputs">
+                                            <input 
+                                                type="date" 
+                                                className="form-input" 
+                                                min={new Date().toISOString().split('T')[0]} 
+                                                value={item.startDate || ''} 
+                                                onChange={(e) => updateDates(item.id!, e.target.value, item.endDate || '')} 
+                                            />
+                                            <span className="arrow">➜</span>
+                                            <input 
+                                                type="date" 
+                                                className="form-input" 
+                                                min={item.startDate || new Date().toISOString().split('T')[0]} 
+                                                value={item.endDate || ''} 
+                                                onChange={(e) => updateDates(item.id!, item.startDate || '', e.target.value)} 
+                                            />
                                         </div>
                                     </div>
-                                    <div>
-                                        <label style={{fontSize:'0.8rem', fontWeight:'bold', display:'block', marginBottom:'5px'}}>Cantidad</label>
-                                        <div className="quantity-controls">
-                                            <button onClick={() => updateQuantity(item.id!, item.quantity - 1)}>-</button>
-                                            <span>{item.quantity}</span>
-                                            <button onClick={() => { if (item.quantity < (item.stock ?? 99)) updateQuantity(item.id!, item.quantity + 1); else alert("¡Límite de stock alcanzado!"); }}>+</button>
+
+                                    {/* 2. SECCIÓN CANTIDAD Y SUBTOTAL */}
+                                    <div className="cart-qty-subtotal">
+                                        <div className="cart-qty">
+                                            <label>Cantidad</label>
+                                            <div className="quantity-controls">
+                                                <button onClick={() => updateQuantity(item.id!, item.quantity - 1)}>-</button>
+                                                <span>{item.quantity}</span>
+                                                <button onClick={() => { if (item.quantity < (item.stock ?? 99)) updateQuantity(item.id!, item.quantity + 1); else alert("¡Límite de stock alcanzado!"); }}>+</button>
+                                            </div>
+                                        </div>
+
+                                        <div className="cart-subtotal">
+                                            <label>Subtotal ({days} días)</label>
+                                            <div className="price-value">${subtotal.toLocaleString()}</div>
                                         </div>
                                     </div>
-                                    <div style={{textAlign:'right', minWidth:'100px'}}>
-                                        <label style={{fontSize:'0.8rem', color:'#666', display:'block'}}>Subtotal ({days} días)</label>
-                                        <div style={{fontSize:'1.2rem', fontWeight:'bold', color:'var(--imperial-blue)'}}>${subtotal.toLocaleString()}</div>
-                                    </div>
+
                                 </div>
+                                {/* --- FIN ZONA CORREGIDA --- */}
+
                             </div>
                         );
                     })}
@@ -169,10 +193,9 @@ export default function CartPage() {
                 </div>
             </div>
             
-            {/* 👇 AQUÍ ESTÁ LA CORRECCIÓN: Pasamos 'items' al modal */}
             {showPayment && (
                 <PaymentModal 
-                    items={itemsToPay} // <--- ESTA LÍNEA ES LA CLAVE PARA LA PREVISUALIZACIÓN
+                    items={itemsToPay} 
                     total={granTotal} 
                     onClose={() => setShowPayment(false)} 
                     onConfirmPayment={handlePaymentSuccess} 

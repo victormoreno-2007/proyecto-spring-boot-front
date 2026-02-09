@@ -41,8 +41,6 @@ export default function AdminReportsPage() {
   const loadAllData = async () => {
     setLoading(true);
     try {
-      // 🚀 MEJORA 1: Carga paralela (Todo al mismo tiempo)
-      // Usamos .catch en cada uno para que si falla uno (ej. estadísticas), no rompa los demás (ej. pagos)
       const [reportsData, statsRes, toolsRes, usersRes, paymentsRes] = await Promise.all([
         bookingService.getAllDamageReports().catch(err => { console.error("Error reportes", err); return []; }),
         api.get('/admin/reports/dashboard').catch(err => { console.error("Error dashboard", err); return null; }),
@@ -51,13 +49,11 @@ export default function AdminReportsPage() {
         api.get('/admin/payments').catch(err => { console.error("Error pagos", err); return { data: [] }; })
       ]);
 
-      // Asignamos datos
       setReports(reportsData || []);
       if (statsRes) setStats(statsRes.data);
       if (toolsRes) setTopTools(toolsRes.data);
       if (usersRes) setTopUsers(usersRes.data);
 
-      // 🚀 MEJORA 2: Ordenar pagos (El más nuevo primero)
       const listaPagos = paymentsRes?.data || [];
       const pagosOrdenados = listaPagos.sort((a: Payment, b: Payment) => 
           new Date(b.paymentDate).getTime() - new Date(a.paymentDate).getTime()
@@ -78,7 +74,8 @@ export default function AdminReportsPage() {
       <h1 className="page-title">📊 Panel de Control & Reportes</h1>
 
       {/* --- SECCIÓN 1: TARJETAS DE ESTADÍSTICAS --- */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+      {/* CORRECCIÓN RESPONSIVE: minmax cambiado de 250px a 200px para móviles pequeños */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
         <div className="stat-card" style={{ background: '#e3f2fd', padding: '20px', borderRadius: '10px' }}>
           <h3>👥 Usuarios</h3>
           <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>{stats?.totalUsers || 0}</p>
@@ -95,7 +92,7 @@ export default function AdminReportsPage() {
         </div>
       </div>
 
-      {/* --- SECCIÓN 2: TOPS --- */}
+      {/* --- SECCIÓN 2: TOPS (Esta sección ya era responsive por el grid auto-fit) --- */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', marginBottom: '50px' }}>
         {/* TOP HERRAMIENTAS */}
         <div>
@@ -133,7 +130,8 @@ export default function AdminReportsPage() {
          🛡️ Monitor de Daños y Garantías
       </h2>
       
-      <div className="table-container" style={{marginTop: '1rem', marginBottom: '50px'}}>
+      {/* CORRECCIÓN: Usamos 'table-responsive' para el scroll horizontal */}
+      <div className="table-responsive" style={{marginTop: '1rem', marginBottom: '50px'}}>
         <table className="users-table">
             <thead>
                 <tr>
@@ -177,11 +175,13 @@ export default function AdminReportsPage() {
       <h2 style={{color: '#333', borderBottom: '2px solid #eee', paddingBottom: '10px'}}>
         💳 Historial de Pagos
       </h2>
+      
+      {/* CORRECCIÓN: 'table-responsive' ya estaba aquí, se mantiene */}
       <div className="table-responsive">
         <table className="users-table">
             <thead>
               <tr style={{background:'#f8f9fa'}}>
-                <th>Fecha y Hora</th> {/* 🚀 MEJORA 3: Título actualizado */}
+                <th>Fecha y Hora</th>
                 <th>Monto</th>
                 <th>Método</th>
                 <th>Estado</th>

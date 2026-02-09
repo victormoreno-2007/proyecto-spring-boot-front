@@ -226,18 +226,50 @@
 }
 
 /* (Pantallas medianas: max 768px) */
+/* ✅ AGREGA ESTO AL FINAL DE src/styles/header.css */
+
 @media (max-width: 768px) {
-    
-    .inspiring-message {
-        display: none !important;
-    }
-
     .header-container {
-        padding: 0 1.5rem;
+        flex-wrap: wrap; /* Permite que los elementos bajen de línea */
+        gap: 10px;
     }
 
-    .logo a { 
-        font-size: 1.3rem !important; 
+    .logo {
+        flex: 1; /* El logo toma espacio disponible */
+    }
+
+    /* La barra de búsqueda baja a una segunda línea y ocupa todo el ancho */
+    .search-container {
+        order: 3; /* Lo mandamos al final visualmente */
+        width: 100%;
+        margin: 10px 0 0 0;
+        max-width: none;
+        display: flex !important; /* Forzamos que se vea */
+    }
+
+    /* El menú de navegación (Inicio, Mis Reservas, etc) */
+    .inspiring-message {
+        display: block !important; /* Lo hacemos visible de nuevo */
+        order: 4; /* Va al final del todo */
+        width: 100%;
+        overflow-x: auto; /* Si no cabe, permite scroll horizontal */
+        padding-top: 10px;
+        white-space: nowrap;
+    }
+
+    .nav-menu ul {
+        justify-content: space-around; /* Alineado a la izquierda */
+        gap: 10px !important;
+        /* padding-bottom: 5px; Espacio para el scrollbar */
+        overflow: hidden; 
+    }
+
+    /* Ajustes visuales para enlaces en móvil */
+    .nav-item {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
     }
 }
 

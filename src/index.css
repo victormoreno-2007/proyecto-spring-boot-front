@@ -94,3 +94,18 @@ a {
   padding-bottom: 5px;
   z-index: 1;
 }
+/* Utilidad para Tablas Responsivas */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto; /* Permite deslizar con el dedo si la tabla es ancha */
+  -webkit-overflow-scrolling: touch; /* Suavidad en iPhone */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.table-responsive table {
+  min-width: 600px; /* Fuerza un ancho mínimo para que no se aplaste */
+  width: 100%;
+}

@@ -93,7 +93,7 @@ export default function UsersPage() {
             </div>
 
             {/* Tabla */}
-            <div className="table-container">
+            <div className="table-responsive">
                 {loading ? (
                     <div style={{ padding: '2rem', textAlign: 'center' }}>Cargando usuarios...</div>
                 ) : (
