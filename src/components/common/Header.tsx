@@ -92,6 +92,7 @@ const Header = () => {
                       📊 Reportes
                     </Link>
                   </li>
+                  
                 </>
               )}
               {/* MENÚ PARA PROVEEDOR */}
@@ -126,6 +127,11 @@ const Header = () => {
                   <li>
                     <Link to="/my-home" style={{ color: '#fdc500', textDecoration: 'none', fontWeight: 'bold' }}>
                       📅 Mis Reservas
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/my-payments" className="nav-link" style={{ color: 'white', textDecoration: 'none', fontWeight: 500 }}>
+                    Mis Pagos
                     </Link>
                   </li>
                 </>

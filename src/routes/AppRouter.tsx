@@ -19,6 +19,7 @@ import CartPage from '../pages/client/CartPage';
 import RentalManagementPage from '../pages/provider/RentalManagementPage';
 import AdminReportsPage from '../pages/admin/AdminReportsPage';
 import ProfilePage from '../pages/profile/ProfilePage';
+import MyPaymentsPage from '../pages/client/MyPaymentsPage';
 
 export default function AppRouter() {
     return (
@@ -57,6 +58,14 @@ export default function AppRouter() {
                     element={
                         <PrivateRoute>
                             <MyBookingsPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/my-payments"
+                    element={
+                        <PrivateRoute>
+                            <MyPaymentsPage />
                         </PrivateRoute>
                     }
                 />
