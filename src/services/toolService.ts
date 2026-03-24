@@ -52,7 +52,7 @@ export const toolService = {
     },
     searchTools: async (query: string): Promise<Tool[]> => {
     if (!query.trim()) {
-        const response = await api.get('/tools');
+        const response = await api.get('/api/v1/tools');
         return response.data;
     }
     const response = await api.get(`/tools/search?name=${query}`);
