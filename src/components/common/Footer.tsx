@@ -3,7 +3,7 @@
 // ⚠️ AJUSTA ESTA RUTA según donde creaste el archivo CSS. 
 // Si está en 'src/styles/Footer.css', la ruta sería: '../../styles/Footer.css'
 import { useAuth } from '../../contexts/AuthContext';
-import '../../styles/Footer.css'; 
+import '../../styles/footer.css'; 
 
 import { Link, useNavigate } from 'react-router-dom';
 

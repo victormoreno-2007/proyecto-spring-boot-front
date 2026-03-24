@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { LoginResponse, User } from '../types/auth';
+import type { LoginResponse} from '../types/auth';
 
 export interface RegisterDTO {
     firstName: string;
