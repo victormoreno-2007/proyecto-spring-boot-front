@@ -17,37 +17,37 @@ export const toolService = {
     // 1. Obtener herramientas de UN proveedor específico
     async getToolsByProvider(providerId: string) {
         // Llama a tu endpoint: GET /api/v1/tools/provider/{id}
-        const response = await api.get<Tool[]>(`/tools/provider/${providerId}`);
+        const response = await api.get<Tool[]>(`tools/provider/${providerId}`);
         return response.data;
     },
 
     // 2. Crear una nueva herramienta
     async createTool(toolData: Tool) {
         // Llama a tu endpoint: POST /api/v1/tools
-        const response = await api.post<Tool>('/tools', toolData);
+        const response = await api.post<Tool>('tools', toolData);
         return response.data;
     },
 
     // 3. Eliminar herramienta
     async deleteTool(toolId: string) {
         // Llama a tu endpoint: DELETE /api/v1/tools/{id}
-        await api.delete(`/tools/${toolId}`);
+        await api.delete(`tools/${toolId}`);
     },
 
     // 4. Actualizar herramienta (Opcional por ahora)
     async updateTool(toolId: string, toolData: Partial<Tool>) {
-        const response = await api.put<Tool>(`/tools/${toolId}`, toolData);
+        const response = await api.put<Tool>(`tools/${toolId}`, toolData);
         return response.data;
     },
 
     async getToolById(toolId: string) {
-        const response = await api.get<Tool>(`/tools/${toolId}`);
+        const response = await api.get<Tool>(`tools/${toolId}`);
         return response.data;
     },
 
     // En toolService.ts
     async getAllTools() {
-        const response = await api.get<Tool[]>('/tools');
+        const response = await api.get<Tool[]>('tools');
         return response.data;
     },
     searchTools: async (query: string): Promise<Tool[]> => {
@@ -55,7 +55,7 @@ export const toolService = {
         const response = await api.get('/api/v1/tools');
         return response.data;
     }
-    const response = await api.get(`/tools/search?name=${query}`);
+    const response = await api.get(`tools/search?name=${query}`);
     return response.data;
   }
 };
