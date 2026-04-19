@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // const API_URL = 'http://localhost:8080/api/v1';
-const API_URL = 'https://victor-2007-proeycto-spring-boot.hf.space/api/v1';
+// const API_URL = 'https://victor-2007-proeycto-spring-boot.hf.space/api/v1'; // antigua URL
+const API_URL = 'https://proyecto-springboot-gk7s.onrender.com/api/v1';
 
 export const api = axios.create({
     baseURL : API_URL,
